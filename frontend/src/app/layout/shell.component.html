@@ -1,0 +1,109 @@
+<div class="shell" [class.collapsed]="collapsed()" [class.mobile-open]="mobileOpen()">
+  <aside class="sidebar">
+    <a class="brand" routerLink="/dashboard">
+      <img src="favicon.svg" alt="" width="34" height="34" />
+      @if (!collapsed()) {
+        <div class="brand-text"><strong>SmartFlow <span>AI</span></strong><small>+ QHSE</small></div>
+      }
+    </a>
+    <nav>
+      @for (g of nav(); track g.key) {
+        @if (!collapsed()) { <div class="group">{{ g.key | tr }}</div> } @else { <div class="group-sep"></div> }
+        @for (i of g.items; track i.route) {
+          <a class="nav-item" [routerLink]="i.route" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: i.route.startsWith('/dashboard') }" [title]="i.key | tr">
+            <span class="icon">{{ i.icon }}</span>
+            @if (!collapsed()) { <span class="label">{{ i.key | tr }}</span> }
+          </a>
+        }
+      }
+    </nav>
+    @if (!collapsed()) {
+      <div class="sidebar-foot">
+        @if (auth.me()?.demo) { <span class="badge sim-flag">{{ 'demo.badge' | tr }}</span> }
+        <small>D&amp;D | Data&amp;Development</small>
+      </div>
+    }
+  </aside>
+  <div class="scrim" (click)="mobileOpen.set(false)"></div>
+
+  <div class="main">
+    <header class="topbar">
+      <button class="btn ghost icon-only mobile-only" (click)="mobileOpen.set(true)" aria-label="menu"><span class="icon">menu</span></button>
+      <button class="btn ghost icon-only desktop-only" (click)="toggleSidebar()" aria-label="collapse"><span class="icon">{{ collapsed() ? 'left_panel_open' : 'left_panel_close' }}</span></button>
+
+      <div class="search global-search">
+        <span class="icon">search</span>
+        <input class="input" [placeholder]="'shell.searchPlaceholder' | tr" [ngModel]="query()" (ngModelChange)="onSearch($event)" />
+        @if (hits().length) {
+          <div class="dropdown search-results">
+            @for (h of hits(); track h.route + h.label) {
+              <button class="dd-item" (click)="go(h)"><span class="icon">{{ h.icon }}</span><span class="grow">{{ h.label }}</span><small class="muted">{{ h.sub | tr }}</small></button>
+            }
+          </div>
+        }
+      </div>
+
+      <div class="spacer"></div>
+
+      <select class="input site-select" [ngModel]="ctx.siteId()" (ngModelChange)="ctx.setSite($event || null)" [title]="'shell.site' | tr">
+        <option [ngValue]="null">{{ 'shell.allSites' | tr }}</option>
+        @for (s of sites(); track s.id) { <option [ngValue]="s.id">{{ s.label }}</option> }
+      </select>
+
+      @if (tenants().length > 1) {
+        <div class="menu-wrap">
+          <button class="btn sm" (click)="menu.set(menu() === 'org' ? null : 'org')"><span class="icon">corporate_fare</span><span class="desktop-only">{{ currentTenant() }}</span></button>
+          @if (menu() === 'org') {
+            <div class="dropdown">
+              <div class="dd-title">{{ 'shell.organization' | tr }}</div>
+              @for (t of tenants(); track t.id) {
+                <button class="dd-item" (click)="auth.switchTenant(t.id)"><span class="icon">domain</span><span class="grow">{{ t.name }}</span>@if (t.demo) {<span class="badge amber">DEMO</span>}</button>
+              }
+            </div>
+          }
+        </div>
+      }
+
+      <div class="menu-wrap">
+        <button class="btn ghost sm" (click)="menu.set(menu() === 'lang' ? null : 'lang')"><span class="icon">translate</span>{{ i18n.lang().toUpperCase() }}</button>
+        @if (menu() === 'lang') {
+          <div class="dropdown narrow">
+            @for (l of i18n.languages; track l.code) {
+              <button class="dd-item" [class.on]="l.code === i18n.lang()" (click)="setLang(l.code)">{{ l.label }}</button>
+            }
+          </div>
+        }
+      </div>
+
+      <a class="btn ghost icon-only bell" routerLink="/notifications" [title]="'nav.notifications' | tr">
+        <span class="icon">notifications</span>
+        @if (rt.unread() > 0) { <span class="count">{{ rt.unread() > 99 ? '99+' : rt.unread() }}</span> }
+      </a>
+
+      <div class="menu-wrap">
+        <button class="avatar" (click)="menu.set(menu() === 'user' ? null : 'user')">{{ initials() }}</button>
+        @if (menu() === 'user') {
+          <div class="dropdown">
+            <div class="user-card">
+              <strong>{{ auth.me()?.firstName }} {{ auth.me()?.lastName }}</strong>
+              <small class="muted">{{ auth.me()?.email }}</small>
+              <span class="badge navy">{{ auth.me()?.role | enum }}</span>
+            </div>
+            <a class="dd-item" routerLink="/profile" (click)="menu.set(null)"><span class="icon">person</span>{{ 'shell.profile' | tr }}</a>
+            <a class="dd-item" routerLink="/notifications" (click)="menu.set(null)"><span class="icon">notifications</span>{{ 'nav.notifications' | tr }}</a>
+            <a class="dd-item" href="/swagger-ui.html" target="_blank"><span class="icon">api</span>API (OpenAPI)</a>
+            <button class="dd-item" (click)="auth.logout()"><span class="icon">logout</span>{{ 'shell.logout' | tr }}</button>
+          </div>
+        }
+      </div>
+    </header>
+
+    @if (crumbs().length) {
+      <div class="crumbs">
+        <a routerLink="/dashboard"><span class="icon">home</span></a>
+        @for (c of crumbs(); track $index) { <span class="sep">/</span><span>{{ ('crumb.' + c) | tr }}</span> }
+      </div>
+    }
+    <main class="content"><router-outlet /></main>
+  </div>
+</div>

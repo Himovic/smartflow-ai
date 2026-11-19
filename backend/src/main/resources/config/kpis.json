@@ -8,7 +8,7 @@
   {"code": "HYGIENE_COMPLIANCE", "name": "Hygiene compliance", "domain": "HYGIENE", "unit": "%", "target": 95, "direction": "HIGHER_IS_BETTER", "calculator": "inspections.passRate.HYGIENE"},
   {"code": "CAPA_COMPLETION", "name": "CAPA completion rate", "domain": "QHSE", "unit": "%", "target": 85, "direction": "HIGHER_IS_BETTER", "calculator": "capa.completion"},
   {"code": "CAPA_OVERDUE", "name": "Overdue CAPA", "domain": "QHSE", "unit": "", "target": 5, "direction": "LOWER_IS_BETTER", "calculator": "capa.overdue"},
-  {"code": "LTIFR", "name": "Lost time injury frequency rate", "domain": "SAFETY", "unit": "", "target": 2.0, "direction": "LOWER_IS_BETTER", "calculator": "safety.ltifr"},
+  {"code": "LTIFR", "name": "Lost time injury frequency rate", "domain": "SAFETY", "unit": "", "target": 10.0, "direction": "LOWER_IS_BETTER", "calculator": "safety.ltifr"},
   {"code": "RECYCLING_RATE", "name": "Waste recycling rate", "domain": "ENVIRONMENT", "unit": "%", "target": 60, "direction": "HIGHER_IS_BETTER", "calculator": "waste.recycling"},
   {"code": "AUDIT_SCORE", "name": "Average audit score", "domain": "QHSE", "unit": "%", "target": 85, "direction": "HIGHER_IS_BETTER", "calculator": "audits.score"}
 ]

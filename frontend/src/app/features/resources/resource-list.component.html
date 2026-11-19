@@ -1,0 +1,92 @@
+@if (!embedded()) {
+  <div class="page-header">
+    <div class="row">
+      <div class="title-icon"><span class="icon">{{ def().icon }}</span></div>
+      <div>
+        <h1>{{ title() ?? (('res.' + def().key) | tr) }}</h1>
+        <div class="subtitle">{{ total() }} {{ 'common.records' | tr }}</div>
+      </div>
+    </div>
+    <div class="row">
+      <button class="btn" (click)="export('xlsx')"><span class="icon">table_view</span>Excel</button>
+      <button class="btn" (click)="export('pdf')"><span class="icon">picture_as_pdf</span>PDF</button>
+      @if (canWrite()) { <button class="btn primary" (click)="create()"><span class="icon">add</span>{{ 'common.new' | tr }}</button> }
+    </div>
+  </div>
+}
+<div class="card fade-in">
+  <div class="toolbar">
+    <div class="search"><span class="icon">search</span><input class="input" [placeholder]="'common.search' | tr" [ngModel]="q()" (ngModelChange)="onSearch($event)" /></div>
+    @for (fl of def().filters ?? []; track fl.key) {
+      <select class="input" [ngModel]="filters()[fl.key] ?? ''" (ngModelChange)="setFilter(fl.key, $event)">
+        <option value="">{{ ('fields.' + fl.key) | tr }}: {{ 'common.all' | tr }}</option>
+        @if (fl.options) { @for (o of fl.options; track o) { <option [value]="o">{{ o | enum }}</option> } }
+        @if (fl.lookup) { @for (o of filterOptions()[fl.lookup] ?? []; track o.id) { <option [value]="o.id">{{ o.label }}</option> } }
+      </select>
+    }
+    <span class="spacer"></span>
+    @if (embedded()) {
+      <button class="btn sm" (click)="export('xlsx')"><span class="icon">table_view</span></button>
+      @if (canWrite()) { <button class="btn sm primary" (click)="create()"><span class="icon">add</span>{{ 'common.new' | tr }}</button> }
+    }
+  </div>
+  <div class="table-wrap">
+    <table class="table">
+      <thead>
+        <tr>
+          @for (col of def().columns; track col.key) {
+            <th class="sortable" [class.num]="col.type === 'number' || col.type === 'money'" (click)="toggleSort(col)">
+              {{ ('fields.' + col.key) | tr }} @if (sortIcon(col)) {<span class="icon" style="font-size:14px">{{ sortIcon(col) }}</span>}
+            </th>
+          }
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        @if (loading() && !rows().length) {
+          @for (i of [1,2,3,4,5,6]; track i) {
+            <tr class="skel-row">@for (col of def().columns; track col.key) {<td><div class="skeleton" style="height:12px"></div></td>}<td></td></tr>
+          }
+        }
+        @for (row of rows(); track row['id']) {
+          <tr class="clickable" (click)="open(row)">
+            @for (col of def().columns; track col.key) {
+              @switch (col.type) {
+                @case ('badge') { <td><sf-badge [value]="row[col.key]" /></td> }
+                @case ('strong') { <td><strong>{{ row[col.key] ?? '—' }}</strong></td> }
+                @case ('date') { <td>{{ row[col.key] ? (row[col.key] | date: 'dd/MM/yyyy') : '—' }}</td> }
+                @case ('datetime') { <td>{{ row[col.key] ? (row[col.key] | date: 'dd/MM/yyyy HH:mm') : '—' }}</td> }
+                @case ('number') { <td class="num">{{ row[col.key] !== null && row[col.key] !== undefined ? (row[col.key] | number: '1.0-1' : i18n.locale) : '—' }}</td> }
+                @case ('money') { <td class="num">{{ row[col.key] !== null && row[col.key] !== undefined ? (row[col.key] | number: '1.0-0' : i18n.locale) : '—' }}</td> }
+                @case ('percent') { <td>{{ row[col.key] !== null && row[col.key] !== undefined ? (row[col.key] | number: '1.0-1') + ' %' : '—' }}</td> }
+                @case ('score') {
+                  <td>@if (row[col.key] !== null && row[col.key] !== undefined) {
+                    <span class="score"><span class="bar" [class]="'bar ' + scoreClass(row[col.key])"><i [style.width.%]="row[col.key] > 25 ? row[col.key] : row[col.key] * 4"></i></span>{{ row[col.key] | number: '1.0-1' }}</span>
+                  } @else { — }</td>
+                }
+                @case ('boolean') { <td>@if (row[col.key]) {<span class="icon" style="color:var(--green)">check_circle</span>} @else {<span class="muted">—</span>}</td> }
+                @case ('lookup') { <td>{{ label(col, row) }}</td> }
+                @default { <td>{{ row[col.key] ?? '—' }}</td> }
+              }
+            }
+            <td class="actions-cell">
+              @if (def().qr) { <button class="btn ghost sm icon-only" (click)="qr(row, $event)" title="QR"><span class="icon">qr_code</span></button> }
+              @if (canWrite() && def().fields.length) { <button class="btn ghost sm icon-only" (click)="edit(row, $event)" [title]="'common.edit' | tr"><span class="icon">edit</span></button> }
+              @if (canDelete()) { <button class="btn ghost sm icon-only" (click)="remove(row, $event)" [title]="'common.delete' | tr"><span class="icon">delete</span></button> }
+            </td>
+          </tr>
+        }
+        @if (!loading() && !rows().length) {
+          <tr><td [attr.colspan]="def().columns.length + 1"><div class="empty"><span class="icon">inbox</span>{{ 'common.empty' | tr }}</div></td></tr>
+        }
+      </tbody>
+    </table>
+  </div>
+  <div class="pagination">
+    <span>{{ total() }} {{ 'common.records' | tr }}</span>
+    <span class="spacer"></span>
+    <button class="btn sm icon-only" [disabled]="page() === 0" (click)="page.set(page() - 1)"><span class="icon">chevron_left</span></button>
+    <span>{{ page() + 1 }} / {{ pages() }}</span>
+    <button class="btn sm icon-only" [disabled]="page() + 1 >= pages()" (click)="page.set(page() + 1)"><span class="icon">chevron_right</span></button>
+  </div>
+</div>

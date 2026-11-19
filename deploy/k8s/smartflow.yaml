@@ -1,0 +1,113 @@
+# SmartFlow AI + QHSE — reference Kubernetes manifests (adapt images, hosts and storage classes).
+# PostgreSQL and Redis are expected as managed services or separate Helm releases.
+apiVersion: v1
+kind: Namespace
+metadata: { name: smartflow }
+---
+apiVersion: v1
+kind: ConfigMap
+metadata: { name: smartflow-config, namespace: smartflow }
+data:
+  DB_URL: jdbc:postgresql://postgres.smartflow.svc:5432/smartflow
+  REDIS_HOST: redis.smartflow.svc
+  CACHE_TYPE: redis
+  AI_SERVICE_URL: http://ai-service:8000
+  PUBLIC_URL: https://smartflow.example.com
+  CORS_ORIGINS: https://smartflow.example.com
+  DEMO_ENABLED: "false"
+---
+# Create with: kubectl -n smartflow create secret generic smartflow-secrets --from-literal=DB_USERNAME=... --from-literal=DB_PASSWORD=...
+#   --from-literal=JWT_SECRET=... --from-literal=ENCRYPTION_KEY=...
+apiVersion: apps/v1
+kind: Deployment
+metadata: { name: backend, namespace: smartflow }
+spec:
+  replicas: 2
+  selector: { matchLabels: { app: backend } }
+  template:
+    metadata: { labels: { app: backend } }
+    spec:
+      containers:
+        - name: backend
+          image: ghcr.io/your-org/smartflow-backend:latest
+          ports: [{ containerPort: 8080 }]
+          envFrom: [{ configMapRef: { name: smartflow-config } }, { secretRef: { name: smartflow-secrets } }]
+          env: [{ name: INTEGRATIONS_SCHEDULER, value: "true" }]
+          readinessProbe: { httpGet: { path: /actuator/health/readiness, port: 8080 }, initialDelaySeconds: 30, periodSeconds: 10 }
+          livenessProbe: { httpGet: { path: /actuator/health/liveness, port: 8080 }, initialDelaySeconds: 60, periodSeconds: 20 }
+          resources: { requests: { cpu: 500m, memory: 768Mi }, limits: { memory: 1536Mi } }
+          volumeMounts: [{ name: files, mountPath: /data/files }]
+      volumes:
+        - name: files
+          persistentVolumeClaim: { claimName: smartflow-files }
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata: { name: smartflow-files, namespace: smartflow }
+spec:
+  accessModes: [ReadWriteMany]
+  resources: { requests: { storage: 20Gi } }
+---
+apiVersion: v1
+kind: Service
+metadata: { name: backend, namespace: smartflow }
+spec: { selector: { app: backend }, ports: [{ port: 8080, targetPort: 8080 }] }
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata: { name: ai-service, namespace: smartflow }
+spec:
+  replicas: 1
+  selector: { matchLabels: { app: ai-service } }
+  template:
+    metadata: { labels: { app: ai-service } }
+    spec:
+      containers:
+        - name: ai-service
+          image: ghcr.io/your-org/smartflow-ai-service:latest
+          ports: [{ containerPort: 8000 }]
+          readinessProbe: { httpGet: { path: /health, port: 8000 } }
+          resources: { requests: { cpu: 250m, memory: 512Mi }, limits: { memory: 1Gi } }
+---
+apiVersion: v1
+kind: Service
+metadata: { name: ai-service, namespace: smartflow }
+spec: { selector: { app: ai-service }, ports: [{ port: 8000, targetPort: 8000 }] }
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata: { name: web, namespace: smartflow }
+spec:
+  replicas: 2
+  selector: { matchLabels: { app: web } }
+  template:
+    metadata: { labels: { app: web } }
+    spec:
+      containers:
+        - name: web
+          image: ghcr.io/your-org/smartflow-web:latest
+          ports: [{ containerPort: 80 }]
+---
+apiVersion: v1
+kind: Service
+metadata: { name: backend-proxy, namespace: smartflow }
+spec: { selector: { app: web }, ports: [{ port: 80, targetPort: 80 }] }
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: smartflow
+  namespace: smartflow
+  annotations:
+    nginx.ingress.kubernetes.io/proxy-body-size: 20m
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "3600"
+spec:
+  ingressClassName: nginx
+  tls: [{ hosts: [smartflow.example.com], secretName: smartflow-tls }]
+  rules:
+    - host: smartflow.example.com
+      http:
+        paths:
+          - { path: /api, pathType: Prefix, backend: { service: { name: backend, port: { number: 8080 } } } }
+          - { path: /ws, pathType: Prefix, backend: { service: { name: backend, port: { number: 8080 } } } }
+          - { path: /, pathType: Prefix, backend: { service: { name: backend-proxy, port: { number: 80 } } } }

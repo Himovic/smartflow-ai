@@ -1,0 +1,98 @@
+<div class="page">
+  <div class="page-header">
+    <div><h1>{{ 'nav.aiCenter' | tr }}</h1><div class="subtitle">{{ 'ai.subtitle' | tr }}</div></div>
+    <a class="btn accent" routerLink="/assistant"><span class="icon">smart_toy</span>{{ 'nav.assistant' | tr }}</a>
+  </div>
+  @if (status(); as s) {
+    <div class="card status"><span class="icon">memory</span><div><strong>{{ s['mode'] }}</strong>
+      <div class="muted small">{{ 'ai.fallbackNote' | tr }}</div></div><span class="spacer"></span>
+      <span class="badge" [class.green]="s['aiServiceReachable']" [class.amber]="!s['aiServiceReachable']">{{ s['aiServiceReachable'] ? 'AI service ON' : 'Fallback' }}</span></div>
+  }
+  <div class="tabs" style="margin-top:16px">
+    <button class="tab" [class.active]="tab() === 'forecast'" (click)="select('forecast')">{{ 'ai.forecasting' | tr }}</button>
+    <button class="tab" [class.active]="tab() === 'quality'" (click)="select('quality')">{{ 'ai.predictiveQuality' | tr }}</button>
+    <button class="tab" [class.active]="tab() === 'maintenance'" (click)="select('maintenance')">{{ 'ai.predictiveMaintenance' | tr }}</button>
+    <button class="tab" [class.active]="tab() === 'qhse'" (click)="select('qhse')">{{ 'ai.qhseIntelligence' | tr }}</button>
+  </div>
+
+  @switch (tab()) {
+    @case ('forecast') {
+      <div class="card"><div class="card-header"><span class="icon" style="color:var(--violet)">online_prediction</span><h3>{{ 'ai.demandForecast' | tr }}</h3>
+        <span class="nature PREDICTION">{{ 'nature.short.PREDICTION' | tr }}</span></div>
+        <div class="card-body">
+          <div class="fc-controls">
+            <div class="field"><label>{{ 'fields.productId' | tr }}</label><select class="input" [(ngModel)]="productId" (ngModelChange)="runForecast()">@for (p of products(); track p.id) {<option [ngValue]="p.id">{{ p.label }}</option>}</select></div>
+            <div class="field" style="min-width:120px"><label>{{ 'ai.horizon' | tr }}</label><select class="input" [(ngModel)]="horizon" (ngModelChange)="runForecast()">@for (h of [4, 8, 12, 26]; track h) {<option [ngValue]="h">{{ h }} {{ 'ai.weeks' | tr }}</option>}</select></div>
+            @if (fc(); as f) {
+              <div class="metric"><span>{{ 'ai.model' | tr }}</span><strong style="font-size:13px">{{ f['model'] }}</strong></div>
+              <div class="metric"><span>MAPE ({{ f['metrics']['holdoutWeeks'] }} {{ 'ai.weeks' | tr }})</span><strong>{{ f['metrics']['mapePercent'] ?? '—' }} %</strong></div>
+              <div class="metric"><span>{{ 'dash.freeStock' | tr }}</span><strong>{{ f['stock']['freeStock'] | number }}</strong></div>
+              <div class="metric"><span>{{ 'dash.daysOfCover' | tr }}</span><strong>{{ f['stock']['daysOfCover'] }}</strong></div>
+              <div class="metric"><span>{{ 'dash.risk' | tr }}</span><sf-badge [value]="f['stock']['stockoutRisk']" /></div>
+              <div class="metric"><span>{{ 'dash.replenish' | tr }}</span><strong>{{ f['stock']['recommendedReplenishment'] | number }}</strong></div>
+            }
+          </div>
+          @if (fcChart()) { <sf-chart [options]="fcChart()!" [tall]="true" /> }
+          @if (fc()) { <p class="muted small">{{ fc()!['dataNature'] }} {{ fc()!['metrics']['note'] }}</p> }
+        </div></div>
+      <div class="card" style="margin-top:16px"><div class="card-header"><h3>{{ 'dash.stockoutRisks' | tr }}</h3><span class="nature PREDICTION">{{ 'nature.short.PREDICTION' | tr }}</span></div>
+        <div class="table-wrap"><table class="table"><thead><tr><th>SKU</th><th>{{ 'fields.name' | tr }}</th><th>{{ 'fields.category' | tr }}</th><th class="num">{{ 'dash.freeStock' | tr }}</th>
+          <th class="num">{{ 'ai.lastWeek' | tr }}</th><th class="num">{{ 'dash.weeklyForecast' | tr }}</th><th class="num">{{ 'dash.daysOfCover' | tr }}</th><th>{{ 'dash.risk' | tr }}</th><th class="num">{{ 'dash.replenish' | tr }}</th></tr></thead>
+          <tbody>@for (o of overview(); track o['productId']) { <tr class="clickable" (click)="pick(o['productId'])"><td><strong>{{ o['sku'] }}</strong></td><td>{{ o['name'] }}</td><td>{{ o['category'] }}</td>
+            <td class="num">{{ o['freeStock'] | number }}</td><td class="num">{{ o['lastWeekActual'] }}</td><td class="num">{{ o['forecastWeekly'] }}</td><td class="num">{{ o['daysOfCover'] }}</td>
+            <td><sf-badge [value]="o['stockoutRisk']" /></td><td class="num">{{ o['recommendedReplenishment'] | number }}</td></tr> }</tbody></table></div></div>
+    }
+    @case ('quality') {
+      @if (quality(); as q) {
+        <div class="card" style="margin-bottom:16px"><div class="card-header"><span class="icon" style="color:var(--amber)">troubleshoot</span><h3>{{ 'ai.anomalies' | tr }}</h3>
+          <span class="nature STATISTICAL">{{ 'nature.short.STATISTICAL' | tr }}</span></div><div class="card-body">
+          <p class="muted small" style="margin-bottom:10px">{{ q['anomalies']['method'] }}</p>
+          @for (a of q['anomalies']['flagged']; track a['id']) { <div class="flag"><span class="icon">warning</span><strong>{{ a['label'] }}</strong>
+            <span>{{ 'ai.lastWeek' | tr }}: {{ a['lastWeek'] }} NC · {{ 'ai.baseline' | tr }} {{ a['baselineMean'] }} · z = {{ a['zScore'] }}</span></div> }
+          @if (!q['anomalies']['flagged'].length) { <p class="muted">{{ 'ai.noAnomaly' | tr }}</p> }</div></div>
+        <div class="grid grid-2">
+          <div class="card"><div class="card-header"><h3>{{ 'ai.lineDefects' | tr }}</h3><span class="nature MEASURED">{{ 'nature.short.MEASURED' | tr }}</span></div><div class="card-body"><sf-chart [options]="lineChart()!" /></div></div>
+          <div class="card"><div class="card-header"><h3>{{ 'ai.supplierPerformance' | tr }}</h3><span class="nature RISK_INDEX">{{ 'nature.short.RISK_INDEX' | tr }}</span></div><div class="card-body"><sf-chart [options]="supplierChart()!" /></div></div>
+        </div>
+        <div class="card" style="margin-top:16px"><div class="card-header"><h3>{{ 'ai.highRiskBatches' | tr }}</h3><span class="nature RISK_INDEX">{{ 'nature.short.RISK_INDEX' | tr }}</span></div>
+          <div class="table-wrap"><table class="table"><thead><tr><th>{{ 'fields.batchNumber' | tr }}</th><th>{{ 'fields.productId' | tr }}</th><th>{{ 'fields.status' | tr }}</th><th class="num">{{ 'trace.stock' | tr }}</th>
+            <th>{{ 'ai.riskScore' | tr }}</th><th>{{ 'ai.reasons' | tr }}</th></tr></thead>
+            <tbody>@for (b of q['highRiskBatches']; track b['batchId']) { <tr class="clickable" [routerLink]="['/traceability', b['batchId']]"><td><strong>{{ b['batchNumber'] }}</strong></td><td>{{ b['product'] }}</td>
+              <td><sf-badge [value]="b['status']" /></td><td class="num">{{ b['stock'] }}</td><td><strong>{{ b['riskScore'] }}</strong></td><td class="reasons">{{ b['reasons'].join(' · ') }}</td></tr> }</tbody></table></div></div>
+      } @else { <div class="card skeleton" style="height:300px"></div> }
+    }
+    @case ('maintenance') {
+      @if (maintenance(); as m) {
+        <div class="card status" style="margin-bottom:16px"><span class="icon">build_circle</span><div><strong>{{ 'ai.availability' | tr }}: {{ m['availability'] }} %</strong>
+          <div class="muted small">{{ m['method'] }}</div></div><span class="nature RISK_INDEX">{{ 'nature.short.RISK_INDEX' | tr }}</span></div>
+        <div class="grid grid-2">
+          <div class="card"><div class="card-header"><h3>{{ 'ai.equipmentRisk' | tr }}</h3></div><div class="card-body"><sf-chart [options]="eqChart()!" [tall]="true" /></div></div>
+          <div class="card"><div class="card-header"><h3>{{ 'ai.recommendations' | tr }}</h3></div>
+            <div class="table-wrap" style="max-height:400px"><table class="table"><tbody>@for (e of m['equipment'].slice(0, 15); track e['equipmentId']) {
+              <tr><td><strong>{{ e['name'] }}</strong><div class="reasons">{{ e['reasons'].join(' · ') }}</div></td><td><sf-badge [value]="e['riskLevel']" /></td><td class="small">{{ e['recommendation'] }}</td></tr> }</tbody></table></div></div>
+        </div>
+        <div class="card" style="margin-top:16px"><div class="card-header"><h3>{{ 'ai.vehicleRisk' | tr }}</h3></div>
+          <div class="table-wrap"><table class="table"><thead><tr><th>{{ 'fields.plateNumber' | tr }}</th><th>{{ 'fields.type' | tr }}</th><th class="num">{{ 'fields.odometerKm' | tr }}</th>
+            <th class="num">{{ 'ai.kmToService' | tr }}</th><th>{{ 'ai.riskScore' | tr }}</th></tr></thead>
+            <tbody>@for (v of m['vehicles']; track v['vehicleId']) { <tr><td><strong>{{ v['plateNumber'] }}</strong></td><td>{{ v['type'] }}</td><td class="num">{{ v['odometerKm'] | number }}</td>
+              <td class="num">{{ v['kmToService'] | number }}</td><td><sf-badge [value]="v['riskLevel']" /> {{ v['riskScore'] }}</td></tr> }</tbody></table></div></div>
+      } @else { <div class="card skeleton" style="height:300px"></div> }
+    }
+    @case ('qhse') {
+      @if (qhse(); as q) {
+        <div class="grid grid-2">
+          <div class="card"><div class="card-header"><h3>{{ 'ai.overdueCapa' | tr }}</h3><span class="badge red">{{ q['overdueCapa'].length }}</span></div>
+            <div class="table-wrap" style="max-height:360px"><table class="table"><tbody>@for (c of q['overdueCapa']; track c['id']) {
+              <tr class="clickable" [routerLink]="['/capa', c['id']]"><td><strong>{{ c['reference'] }}</strong><div class="reasons">{{ c['title'] }}</div></td><td>{{ c['owner'] }}</td>
+                <td class="num"><span class="badge red">+{{ c['daysOverdue'] }} j</span></td></tr> }</tbody></table></div></div>
+          <div class="card"><div class="card-header"><h3>{{ 'ai.recurrentNc' | tr }}</h3></div>
+            <div class="table-wrap" style="max-height:360px"><table class="table"><tbody>@for (r of q['recurrentNonConformities']; track $index) {
+              <tr><td><strong>{{ r['category'] }}</strong><div class="reasons">{{ r['line'] }} · {{ r['references'].join(', ') }}</div></td><td class="num"><span class="badge amber">{{ r['occurrences90d'] }}×</span></td></tr> }</tbody></table></div></div>
+          <div class="card span-2"><div class="card-header"><h3>{{ 'risk.top' | tr }}</h3></div>
+            <div class="table-wrap"><table class="table"><tbody>@for (r of q['topRisks']; track r['id']) { <tr><td><strong>{{ r['reference'] }}</strong></td><td>{{ r['title'] }}</td>
+              <td class="num">{{ r['score'] }} → {{ r['residualScore'] }}</td><td><sf-badge [value]="r['level']" /></td></tr> }</tbody></table></div></div>
+        </div>
+      } @else { <div class="card skeleton" style="height:300px"></div> }
+    }
+  }
+</div>

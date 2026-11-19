@@ -1,0 +1,83 @@
+<div class="page">
+  <div class="page-header">
+    <div><h1>{{ 'nav.traceability' | tr }}</h1><div class="subtitle">{{ 'trace.subtitle' | tr }}</div></div>
+    <form class="row" (ngSubmit)="search()">
+      <div class="search"><span class="icon">qr_code_scanner</span><input class="input" name="q" [(ngModel)]="query" [placeholder]="'trace.searchPlaceholder' | tr" /></div>
+      <button class="btn primary" type="submit"><span class="icon">search</span>{{ 'trace.trace' | tr }}</button>
+    </form>
+  </div>
+
+  @if (!id()) {
+    <div class="card"><div class="card-header"><h3>{{ 'trace.recentBatches' | tr }}</h3></div>
+      <div class="table-wrap"><table class="table"><tbody>
+        @for (b of recent(); track b['id']) { <tr class="clickable" [routerLink]="['/traceability', b['id']]"><td><strong>{{ b['batchNumber'] }}</strong></td>
+          <td>{{ b['productionDate'] | date: 'dd/MM/yyyy' }}</td><td><sf-badge [value]="b['status']" /></td><td class="num">{{ b['quantityProduced'] }}</td></tr> }
+      </tbody></table></div></div>
+  }
+
+  @if (t(); as t) {
+    <div class="card hero" [class.recalled]="t['batch']['status'] === 'RECALLED'">
+      <div class="hero-main">
+        <span class="icon big">qr_code_2</span>
+        <div>
+          <div class="muted small">{{ t['product']?.['sku'] }}</div>
+          <h2>{{ t['batch']['batchNumber'] }} — {{ t['product']?.['name'] }}</h2>
+          <div class="row wrap"><sf-badge [value]="t['batch']['status']" /><sf-badge [value]="t['batch']['qualityStatus']" />
+            <span class="muted small">{{ 'fields.productionDate' | tr }} {{ t['batch']['productionDate'] | date: 'dd/MM/yyyy' }} · {{ 'fields.expiryDate' | tr }} {{ t['batch']['expiryDate'] | date: 'dd/MM/yyyy' }}</span></div>
+        </div>
+      </div>
+      <div class="row wrap">
+        <button class="btn" (click)="qr()"><span class="icon">qr_code</span>QR</button>
+        <button class="btn" (click)="report()"><span class="icon">picture_as_pdf</span>{{ 'trace.impactReport' | tr }}</button>
+        @if (t['batch']['status'] === 'QUARANTINE' && auth.can('quality', 'approve')) { <button class="btn primary" (click)="release()"><span class="icon">verified</span>{{ 'trace.release' | tr }}</button> }
+        @if (t['batch']['status'] !== 'RECALLED' && auth.can('traceability', 'approve')) { <button class="btn danger" (click)="recall()"><span class="icon">warning</span>{{ 'trace.recall' | tr }}</button> }
+      </div>
+    </div>
+
+    <div class="impact">
+      @for (k of ['quantityProduced','remainingInventory','warehousesHoldingBatch','distributedQuantity','ordersAffected','deliveriesAffected','customersAffected','relatedNonConformities']; track k) {
+        <div class="card imp"><span class="lbl">{{ ('trace.' + k) | tr }}</span><strong>{{ t['summary'][k] | number }}</strong></div>
+      }
+    </div>
+
+    <div class="flow">
+      <div class="card col">
+        <div class="card-header"><span class="icon">arrow_back</span><h3>{{ 'trace.backward' | tr }}</h3></div>
+        <div class="card-body nodes">
+          @if (t['backward']['supplier']; as s) { <div class="node"><span class="icon">handshake</span><div><small>{{ 'fields.supplierId' | tr }}</small><strong>{{ s['name'] }}</strong>
+            <span class="muted small">{{ s['country'] }} · {{ 'fields.qualityScore' | tr }} {{ s['qualityScore'] }}</span></div><sf-badge [value]="s['status']" /></div> }
+          <div class="node"><span class="icon">inventory</span><div><small>{{ 'fields.rawMaterialLots' | tr }}</small>@for (l of t['backward']['rawMaterialLots']; track l) {<code>{{ l }}</code>}</div></div>
+          @if (t['backward']['site']; as s) { <div class="node"><span class="icon">factory</span><div><small>{{ 'fields.siteId' | tr }}</small><strong>{{ s['name'] }}</strong></div></div> }
+          @if (t['backward']['productionLine']; as l) { <div class="node"><span class="icon">precision_manufacturing</span><div><small>{{ 'fields.productionLineId' | tr }}</small><strong>{{ l['code'] }} — {{ l['name'] }}</strong></div></div> }
+          <div class="node col2"><span class="icon">fact_check</span><div><small>{{ 'nav.inspections' | tr }}</small>
+            @for (i of t['backward']['inspections']; track i['id']) { <a [routerLink]="['/inspections', i['id']]" class="ins">{{ i['reference'] }} <sf-badge [value]="i['result']" /></a> }
+            @for (i of t['backward']['incomingInspections'] ?? []; track i['id']) { <a [routerLink]="['/inspections', i['id']]" class="ins">{{ i['reference'] }} ({{ 'trace.incoming' | tr }}) <sf-badge [value]="i['result']" /></a> }
+            @if (!t['backward']['inspections'].length && !(t['backward']['incomingInspections'] ?? []).length) { <span class="muted small">—</span> }</div></div>
+        </div>
+      </div>
+      <div class="card col">
+        <div class="card-header"><span class="icon">arrow_forward</span><h3>{{ 'trace.forward' | tr }}</h3></div>
+        <div class="card-body">
+          <h3 class="sub">{{ 'trace.stock' | tr }}</h3>
+          <table class="table compact"><tbody>@for (s of t['forward']['stock']; track s['warehouseId']) { <tr><td>{{ s['warehouse'] }}</td><td>{{ s['city'] }}</td><td class="num">{{ s['quantity'] }}</td></tr> }
+            @empty { <tr><td class="muted">—</td></tr> }</tbody></table>
+          <h3 class="sub">{{ 'trace.customers' | tr }} ({{ t['forward']['customers'].length }})</h3>
+          <table class="table compact"><tbody>@for (c of t['forward']['customers']; track c['id']) { <tr><td><strong>{{ c['name'] }}</strong></td><td>{{ c['city'] }}</td><td>{{ c['phone'] }}</td><td class="num">{{ c['quantity'] }}</td></tr> }
+            @empty { <tr><td class="muted">—</td></tr> }</tbody></table>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid grid-2" style="margin-top:16px">
+      <div class="card"><div class="card-header"><h3>{{ 'trace.map' | tr }}</h3></div><div class="card-body"><sf-map [markers]="markers()" [lines]="lines()" [height]="320" /></div></div>
+      <div class="card"><div class="card-header"><h3>{{ 'nav.nonConformities' | tr }}</h3></div>
+        <div class="table-wrap"><table class="table"><tbody>@for (n of t['nonConformities']; track n['id']) {
+          <tr class="clickable" [routerLink]="['/non-conformities', n['id']]"><td><strong>{{ n['reference'] }}</strong></td><td>{{ n['title'] }}</td><td><sf-badge [value]="n['severity']" /></td><td><sf-badge [value]="n['status']" /></td></tr>
+        } @empty { <tr><td><div class="empty">{{ 'trace.noNc' | tr }}</div></td></tr> }</tbody></table></div>
+        <div class="card-header" style="border-top:1px solid var(--border)"><h3>{{ 'trace.movements' | tr }}</h3></div>
+        <div class="table-wrap" style="max-height:220px"><table class="table compact"><tbody>@for (m of t['forward']['movements']; track m['id']) {
+          <tr><td>{{ m['occurredAt'] | date: 'dd/MM HH:mm' }}</td><td><sf-badge [value]="m['type']" /></td><td class="num">{{ m['quantity'] }}</td></tr> }</tbody></table></div>
+      </div>
+    </div>
+  } @else if (loading()) { <div class="card skeleton" style="height:240px"></div> }
+</div>

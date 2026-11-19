@@ -1,0 +1,73 @@
+<div class="landing">
+  <header class="hero">
+    <nav class="top">
+      <div class="brand"><img src="favicon.svg" width="36" height="36" alt="" /><strong>SmartFlow <span>AI</span> <em>+ QHSE</em></strong></div>
+      <div class="langs">@for (l of i18n.languages; track l.code) { <button [class.on]="i18n.lang() === l.code" (click)="setLang(l.code)">{{ l.label }}</button> }</div>
+      <a class="btn sm ghost light" routerLink="/login">{{ 'login.signIn' | tr }}</a>
+    </nav>
+    <div class="hero-grid">
+      <div class="hero-text fade-in">
+        <span class="pill"><span class="icon">auto_awesome</span>Smart Care Challenge 2026</span>
+        <h1>SmartFlow AI + QHSE</h1>
+        <p class="tagline">{{ 'landing.tagline' | tr }}</p>
+        <p class="intro">{{ 'landing.intro' | tr }}</p>
+        <div class="row wrap cta">
+          <a class="btn accent lg" href="#accounts"><span class="icon">play_circle</span>{{ 'landing.tryDemo' | tr }}</a>
+          <a class="btn ghost light lg" routerLink="/login"><span class="icon">login</span>{{ 'login.signIn' | tr }}</a>
+        </div>
+        <p class="by">{{ 'landing.developedBy' | tr }} <strong>D&amp;D | Data&amp;Development</strong></p>
+      </div>
+      <div class="qr-card fade-in">
+        @if (qr()) { <img [src]="qr()" alt="QR code" width="220" height="220" /> }
+        <strong>{{ 'landing.scan' | tr }}</strong>
+        <span class="muted small">{{ info()?.url }}</span>
+      </div>
+    </div>
+  </header>
+
+  <section class="section">
+    <h2>{{ 'landing.capabilities' | tr }}</h2>
+    <div class="modules">
+      @for (m of modules; track m.key) {
+        <div class="module card"><span class="icon">{{ m.icon }}</span><strong>{{ ('landing.mod.' + m.key) | tr }}</strong><p class="muted">{{ ('landing.modDesc.' + m.key) | tr }}</p></div>
+      }
+    </div>
+  </section>
+
+  <section class="section" id="accounts">
+    <div class="row wrap" style="justify-content:space-between">
+      <div>
+        <h2>{{ 'landing.accounts' | tr }}</h2>
+        <p class="muted">{{ 'landing.accountsHint' | tr }} — <strong>{{ info()?.organization }}</strong></p>
+      </div>
+      @if (info()?.password) {
+        <div class="pwd"><span class="muted small">{{ 'landing.password' | tr }}</span><code (click)="copy(info()!.password!)">{{ info()!.password }}</code></div>
+      }
+    </div>
+    @if (info() && !info()!.ready) {
+      <div class="card notice"><span class="icon">hourglass_top</span>{{ 'landing.preparing' | tr }}</div>
+    }
+    <div class="accounts">
+      @for (a of info()?.accounts ?? []; track a.email) {
+        <div class="account card">
+          <div class="row"><span class="badge navy">{{ a.role | enum }}</span></div>
+          <strong>{{ a.name }}</strong>
+          <code (click)="copy(a.email)">{{ a.email }}</code>
+          <p class="muted small">{{ a.scope }}</p>
+          <button class="btn primary" [disabled]="busy() !== null || !info()!.ready" (click)="enter(a.email)">
+            <span class="icon">{{ busy() === a.email ? 'progress_activity' : 'login' }}</span>{{ 'landing.enterAs' | tr }}
+          </button>
+        </div>
+      }
+    </div>
+  </section>
+
+  <section class="section sim">
+    <div class="card sim-card">
+      <span class="icon">info</span>
+      <div><h3>{{ 'landing.simTitle' | tr }}</h3><p>{{ 'landing.simText' | tr }}</p><p class="muted small">{{ info()?.notice }}</p></div>
+    </div>
+  </section>
+
+  <footer class="foot">© 2026 D&amp;D | Data&amp;Development — SmartFlow AI + QHSE · ISO 9001 · ISO 14001 · ISO 45001 {{ 'landing.isoNote' | tr }}</footer>
+</div>

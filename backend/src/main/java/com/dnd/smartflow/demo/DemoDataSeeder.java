@@ -1628,7 +1628,7 @@ public class DemoDataSeeder {
         i.setOccurredAt(when.isAfter(Instant.now()) ? Instant.now().minus(Duration.ofHours(3)) : when);
         i.setReportedByName(personName());
         i.setInjuredPersons("ACCIDENT".equals(i.getType()) || "FIRST_AID".equals(i.getType()) ? 1 : 0);
-        i.setLostTimeDays("ACCIDENT".equals(i.getType()) ? (chance(0.6) ? 1 + rnd.nextInt(15) : 0) : 0);
+        i.setLostTimeDays("ACCIDENT".equals(i.getType()) ? (chance(0.25) ? 1 + rnd.nextInt(15) : 0) : 0);
         i.setImmediateActions(pick(List.of("Zone sécurisée et balisée", "Premiers soins prodigués", "Machine arrêtée et consignée", "Absorbants déployés", "Information du responsable de poste")));
         i.setDueDate(i.getOccurredAt().atZone(ZONE).toLocalDate().plusDays(i.getSeverity() >= 4 ? 7 : 21));
         i.setCustomFields(Map.of("witness", personName()));
@@ -2207,11 +2207,11 @@ public class DemoDataSeeder {
 
     // =============================================================== integrations & notifications
     private void seedIntegrations() {
-        Object[][] defs = {{"SAP S/4HANA — ERP Groupe Atlas (DEMO / SIMULATED)", "SIM_ERP", "SAP", List.of("PRODUCT", "CUSTOMER", "SUPPLIER", "STOCK"), 60},
-                {"Odoo 17 — Filiale distribution Oran (DEMO / SIMULATED)", "SIM_ERP", "ODOO", List.of("CUSTOMER", "STOCK"), 120},
-                {"SAP PM — GMAO usines (DEMO / SIMULATED)", "SIM_CMMS", null, List.of("EQUIPMENT", "WORK_ORDER"), 60},
-                {"Suivi GPS de la flotte (DEMO / SIMULATED)", "SIM_GPS", null, List.of("VEHICLE_POSITION"), 5},
-                {"Capteurs IoT température / humidité (DEMO / SIMULATED)", "SIM_IOT", null, List.of("SENSOR_READING"), 15}};
+        Object[][] defs = {{"SAP S/4HANA — ERP Groupe Atlas", "SIM_ERP", "SAP", List.of("PRODUCT", "CUSTOMER", "SUPPLIER", "STOCK"), 60},
+                {"Odoo 17 — Filiale distribution Oran", "SIM_ERP", "ODOO", List.of("CUSTOMER", "STOCK"), 120},
+                {"SAP PM — GMAO usines", "SIM_CMMS", null, List.of("EQUIPMENT", "WORK_ORDER"), 60},
+                {"Suivi GPS de la flotte", "SIM_GPS", null, List.of("VEHICLE_POSITION"), 5},
+                {"Capteurs IoT température / humidité", "SIM_IOT", null, List.of("SENSOR_READING"), 15}};
         for (Object[] d : defs) {
             IntegrationConnector c = new IntegrationConnector();
             c.setName((String) d[0]);

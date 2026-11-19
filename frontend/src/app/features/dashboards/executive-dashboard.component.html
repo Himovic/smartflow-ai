@@ -1,0 +1,67 @@
+<div class="page">
+  <div class="page-header">
+    <div>
+      <h1>{{ greeting() | tr }}, {{ auth.me()?.firstName }}</h1>
+      <div class="subtitle">{{ 'dash.executiveSubtitle' | tr }} — {{ auth.me()?.tenant?.name }}</div>
+    </div>
+    <div class="filters">
+      <input class="input" type="date" [ngModel]="from()" (ngModelChange)="from.set($event)" [title]="'common.from' | tr" />
+      <input class="input" type="date" [ngModel]="to()" (ngModelChange)="to.set($event)" [title]="'common.to' | tr" />
+      <a class="btn" routerLink="/reports"><span class="icon">summarize</span>{{ 'nav.reports' | tr }}</a>
+    </div>
+  </div>
+
+  @if (data(); as d) {
+    <div class="kpi-grid">
+      @for (k of d.kpis; track k.code) { <sf-kpi [k]="k" /> }
+    </div>
+
+    <div class="grid grid-3" style="margin-top:16px">
+      <div class="card risk">
+        <div class="card-header"><span class="icon" style="color:var(--amber)">crisis_alert</span><h3>{{ 'dash.operationalRisk' | tr }}</h3>
+          <span class="nature RISK_INDEX">{{ 'nature.short.RISK_INDEX' | tr }}</span></div>
+        <sf-chart [options]="riskGauge()" [height]="220" />
+        <div class="formula">{{ d.operationalRisk.formula }}</div>
+      </div>
+      <div class="card span-2">
+        <div class="card-header"><span class="icon" style="color:var(--red)">notification_important</span><h3>{{ 'dash.criticalAlerts' | tr }}</h3>
+          <a class="btn sm ghost" routerLink="/notifications">{{ 'common.viewAll' | tr }}</a></div>
+        <div>
+          @for (a of d.alerts; track $index) {
+            <a class="alert-row" [routerLink]="a.route">
+              <span class="icon" [class]="'icon sev-' + a.severity">{{ a.severity === 'CRITICAL' ? 'error' : a.severity === 'WARNING' ? 'warning' : 'info' }}</span>
+              <div style="flex:1"><strong>{{ a.title }}</strong><div class="muted small">{{ a.detail }}</div></div>
+              <span class="badge">{{ a.category | enum }}</span>
+            </a>
+          }
+          @if (!d.alerts.length) { <div class="empty"><span class="icon">verified</span>{{ 'dash.noAlerts' | tr }}</div> }
+        </div>
+      </div>
+    </div>
+
+    <div class="grid grid-2" style="margin-top:16px">
+      <div class="card"><div class="card-header"><h3>{{ 'dash.productionTrend' | tr }}</h3><span class="nature MEASURED">{{ 'nature.short.MEASURED' | tr }}</span></div>
+        <div class="card-body">@if (productionChart()) {<sf-chart [options]="productionChart()!" />}</div></div>
+      <div class="card"><div class="card-header"><h3>{{ 'dash.revenueTrend' | tr }}</h3><span class="nature MEASURED">{{ 'nature.short.MEASURED' | tr }}</span></div>
+        <div class="card-body">@if (revenueChart()) {<sf-chart [options]="revenueChart()!" />}</div></div>
+      <div class="card"><div class="card-header"><h3>{{ 'dash.qhseTrend' | tr }}</h3><a class="btn sm ghost" routerLink="/dashboard/qhse">{{ 'common.details' | tr }}</a></div>
+        <div class="card-body">@if (qhseChart()) {<sf-chart [options]="qhseChart()!" />}</div></div>
+      <div class="card"><div class="card-header"><h3>{{ 'dash.sitesMap' | tr }}</h3></div>
+        <div class="card-body"><sf-map [markers]="siteMarkers()" [height]="300" /></div></div>
+    </div>
+
+    <div class="card" style="margin-top:16px">
+      <div class="card-header"><h3>{{ 'dash.sitesOverview' | tr }}</h3></div>
+      <div class="table-wrap"><table class="table">
+        <thead><tr><th>{{ 'fields.name' | tr }}</th><th>{{ 'fields.type' | tr }}</th><th>{{ 'fields.city' | tr }}</th><th class="num">{{ 'nav.employees' | tr }}</th>
+          <th class="num">{{ 'dash.openNc' | tr }}</th><th class="num">{{ 'dash.openIncidents' | tr }}</th></tr></thead>
+        <tbody>@for (s of d.sites; track s.id) {
+          <tr class="site-row clickable" (click)="ctx.setSite(s.id)"><td><strong>{{ s.name }}</strong></td><td><sf-badge [value]="s.type" /></td><td>{{ s.city }}</td>
+            <td class="num">{{ s.employees }}</td><td class="num">{{ s.openNc }}</td><td class="num">{{ s.openIncidents }}</td></tr>
+        }</tbody>
+      </table></div>
+    </div>
+  } @else {
+    <div class="kpi-grid">@for (i of [1,2,3,4,5,6,7,8]; track i) { <div class="card skeleton" style="height:112px"></div> }</div>
+  }
+</div>

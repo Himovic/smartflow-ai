@@ -1,0 +1,73 @@
+<div class="page">
+  <div class="page-header">
+    <div><h1>{{ 'nav.integrations' | tr }}</h1><div class="subtitle">{{ 'integrations.subtitle' | tr }}</div></div>
+    @if (admin()) { <button class="btn primary" (click)="showWizard.set(!showWizard())"><span class="icon">add_link</span>{{ 'integrations.add' | tr }}</button> }
+  </div>
+
+  @if (showWizard()) {
+    <div class="card wizard fade-in" style="margin-bottom:16px">
+      <h2>{{ 'integrations.add' | tr }}</h2>
+      <div class="form-grid" style="margin-top:14px">
+        <div class="field"><label>{{ 'fields.name' | tr }} *</label><input class="input" [(ngModel)]="form['name']" /></div>
+        <div class="field"><label>{{ 'integrations.provider' | tr }} *</label>
+          <select class="input" [(ngModel)]="form['provider']" (ngModelChange)="form['entityTypes'] = []">@for (p of providers(); track p['code']) {<option [value]="p['code']">{{ p['label'] }}{{ p['simulated'] ? ' — DEMO' : '' }}</option>}</select></div>
+        @if (!provider(form['provider'])?.['simulated']) {
+          <div class="field full"><label>Base URL</label><input class="input" [(ngModel)]="form['baseUrl']" placeholder="https://erp.example.com" /></div>
+          <div class="field"><label>{{ 'integrations.auth' | tr }}</label><select class="input" [(ngModel)]="form['authType']">@for (a of ['NONE','BASIC','BEARER','API_KEY','OAUTH2']; track a) {<option [value]="a">{{ a }}</option>}</select></div>
+          <div class="field"><label>{{ 'integrations.username' | tr }}</label><input class="input" [(ngModel)]="creds.username" autocomplete="off" /></div>
+          <div class="field"><label>{{ 'integrations.secret' | tr }}</label><input class="input" type="password" [(ngModel)]="creds.password" autocomplete="new-password" /></div>
+          <div class="field"><label>API key / token</label><input class="input" type="password" [(ngModel)]="creds.apiKey" autocomplete="new-password" /></div>
+          <div class="field full"><label>{{ 'integrations.config' | tr }} (JSON)</label><textarea class="input mono" rows="4" [(ngModel)]="configJson"></textarea>
+            <span class="hint">{{ provider(form['provider'])?.['configKeys']?.join(' · ') }}</span></div>
+        }
+        <div class="field full"><label>{{ 'integrations.entities' | tr }}</label>
+          <div class="entities">@for (e of provider(form['provider'])?.['entities'] ?? []; track e) {
+            <label class="checkbox"><input type="checkbox" [checked]="form['entityTypes'].includes(e)" (change)="toggleEntity(e)" />{{ e | enum }}</label> }</div></div>
+        <div class="field"><label>{{ 'integrations.frequency' | tr }} (min)</label><input class="input" type="number" [(ngModel)]="form['syncFrequencyMinutes']" /></div>
+        <div class="field"><label>{{ 'integrations.conflict' | tr }}</label><select class="input" [(ngModel)]="form['conflictPolicy']">@for (p of ['REMOTE_WINS','LOCAL_WINS','MANUAL']; track p) {<option [value]="p">{{ p | enum }}</option>}</select></div>
+      </div>
+      <p class="small muted" style="margin-top:10px"><span class="icon" style="font-size:16px">lock</span> {{ 'integrations.credentialsNote' | tr }}</p>
+      <div class="row" style="justify-content:flex-end;margin-top:12px"><button class="btn" (click)="showWizard.set(false)">{{ 'common.cancel' | tr }}</button>
+        <button class="btn primary" [disabled]="!form['name']" (click)="create()"><span class="icon">save</span>{{ 'common.save' | tr }}</button></div>
+    </div>
+  }
+
+  <div class="conns">
+    @for (c of connectors(); track c['id']) {
+      <div class="card conn" [class.sel]="selected()?.['id'] === c['id']" (click)="open(c)">
+        <div class="conn-head"><div class="logo"><span class="icon">{{ icon(c['category']) }}</span></div>
+          <div style="flex:1"><strong>{{ c['name'] }}</strong><div class="muted small">{{ provider(c['provider'])?.['label'] ?? c['provider'] }}</div></div>
+          <span class="badge" [class.sim-flag]="c['mode'] === 'SIMULATED'" [class.green]="c['mode'] === 'LIVE'">{{ c['mode'] === 'SIMULATED' ? 'DEMO / SIMULATED' : 'LIVE' }}</span></div>
+        <div class="meta"><sf-badge [value]="c['lastStatus']" /><span class="muted">{{ 'integrations.lastSync' | tr }}: {{ c['lastSyncAt'] ? (c['lastSyncAt'] | date: 'dd/MM HH:mm') : '—' }}</span>
+          <span class="muted">· {{ c['syncFrequencyMinutes'] }} min</span>@if (c['failedRecords']) {<span class="badge red">{{ c['failedRecords'] }} {{ 'integrations.failed' | tr }}</span>}</div>
+        <div class="meta">@for (e of c['entityTypes']; track e) {<span class="badge outline">{{ e | enum }}</span>}</div>
+        @if (c['lastError']) { <div class="err">{{ c['lastError'] }}</div> }
+        <div class="row" (click)="$event.stopPropagation()">
+          <button class="btn sm" [disabled]="busy() === 'test' + c['id']" (click)="test(c)"><span class="icon">network_check</span>{{ 'integrations.test' | tr }}</button>
+          <button class="btn sm primary" [disabled]="busy() === 'run' + c['id'] || !c['enabled']" (click)="run(c)"><span class="icon">sync</span>{{ 'integrations.sync' | tr }}</button>
+          <span class="spacer"></span>
+          @if (admin()) { <label class="checkbox small"><input type="checkbox" [checked]="c['enabled']" (change)="toggle(c)" />{{ 'integrations.enabled' | tr }}</label> }
+        </div>
+      </div>
+    }
+  </div>
+
+  @if (selected(); as s) {
+    <div class="grid grid-2" style="margin-top:16px">
+      <div class="card"><div class="card-header"><h3>{{ 'integrations.history' | tr }} — {{ s['name'] }}</h3></div>
+        <div class="table-wrap" style="max-height:420px"><table class="table"><thead><tr><th>{{ 'fields.startedAt' | tr }}</th><th>{{ 'integrations.trigger' | tr }}</th><th>{{ 'fields.status' | tr }}</th>
+          <th class="num">{{ 'integrations.read' | tr }}</th><th class="num">+</th><th class="num">~</th><th class="num">=</th><th class="num">✗</th></tr></thead>
+          <tbody>@for (j of jobs(); track j['id']) { <tr><td>{{ j['startedAt'] | date: 'dd/MM HH:mm:ss' }}</td><td><sf-badge [value]="j['triggerType']" /></td><td><sf-badge [value]="j['status']" /></td>
+            <td class="num">{{ j['recordsRead'] }}</td><td class="num">{{ j['recordsCreated'] }}</td><td class="num">{{ j['recordsUpdated'] }}</td><td class="num">{{ j['recordsSkipped'] }}</td><td class="num">{{ j['recordsFailed'] }}</td></tr> }</tbody></table></div>
+        <p class="small muted" style="padding:10px 16px">{{ 'integrations.legend' | tr }}</p></div>
+      <div class="card"><div class="card-header"><h3>{{ 'integrations.failedRecords' | tr }}</h3></div>
+        <div class="table-wrap" style="max-height:420px"><table class="table"><tbody>@for (r of records(); track r['id']) {
+          <tr><td><strong>{{ r['entityType'] | enum }}</strong> <span class="mono">{{ r['externalId'] }}</span><div class="err">{{ r['error'] }}</div>
+            <details><summary class="small muted">payload</summary><pre>{{ r['payload'] | json }}</pre></details></td>
+            <td><sf-badge [value]="r['status']" /><div class="small muted">× {{ r['attempts'] }}</div></td>
+            <td><button class="btn sm" (click)="retry(r)"><span class="icon">replay</span>{{ 'integrations.retry' | tr }}</button></td></tr>
+        } @empty { <tr><td><div class="empty"><span class="icon">task_alt</span>{{ 'integrations.noFailed' | tr }}</div></td></tr> }</tbody></table></div></div>
+    </div>
+    <p class="small muted" style="margin-top:10px">Webhook: <code>POST {{ s['webhookUrl'] }}</code> — header <code>X-SmartFlow-Signature: sha256=HMAC(secret, body)</code></p>
+  }
+</div>
