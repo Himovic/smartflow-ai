@@ -1,0 +1,1839 @@
+{
+ "profiles": [
+  {
+   "code": "FMCG_MANUFACTURING",
+   "label": "Manufacturing & FMCG",
+   "description": "Production quality control, warehouse hygiene, batch traceability, distribution and fleet.",
+   "inspectionTemplates": [
+    "QC-INCOMING",
+    "QC-INPROCESS",
+    "QC-FINISHED",
+    "HY-WAREHOUSE",
+    "HY-PERSONNEL",
+    "HY-VEHICLE",
+    "SF-WALK",
+    "SF-FIRE",
+    "EN-COMPLIANCE"
+   ],
+   "settings": {
+    "enabledModules": [
+     "catalog",
+     "inventory",
+     "traceability",
+     "distribution",
+     "fleet",
+     "routes",
+     "assets",
+     "quality",
+     "hygiene",
+     "safety",
+     "environment",
+     "risk",
+     "inspections",
+     "incidents",
+     "nc",
+     "capa",
+     "audits",
+     "documents",
+     "training",
+     "integrations",
+     "analytics",
+     "ai"
+    ],
+    "terminology": {
+     "batch": "Lot",
+     "site": "Site",
+     "productionLine": "Ligne de production"
+    },
+    "riskCategories": [
+     "Product safety",
+     "Occupational safety",
+     "Machine safety",
+     "Logistics & traffic",
+     "Environmental",
+     "Fire & explosion"
+    ],
+    "hazardCategories": [
+     "MECHANICAL",
+     "ELECTRICAL",
+     "CHEMICAL",
+     "PHYSICAL",
+     "BIOLOGICAL",
+     "ERGONOMIC",
+     "PSYCHOSOCIAL",
+     "FIRE",
+     "ENVIRONMENTAL",
+     "TRAFFIC"
+    ],
+    "qualityCriteria": [
+     "Net weight",
+     "Sealing",
+     "Coding",
+     "Moisture",
+     "Foreign bodies",
+     "Organoleptic"
+    ],
+    "ncTypes": [
+     "PRODUCT",
+     "PROCESS",
+     "SUPPLIER",
+     "CUSTOMER_COMPLAINT",
+     "AUDIT",
+     "HYGIENE",
+     "SAFETY",
+     "ENVIRONMENT"
+    ],
+    "incidentTypes": [
+     "ACCIDENT",
+     "NEAR_MISS",
+     "FIRST_AID",
+     "DANGEROUS_SITUATION",
+     "PROPERTY_DAMAGE",
+     "SPILL",
+     "EMISSION",
+     "FIRE"
+    ],
+    "environmentalIndicators": [
+     "ENERGY_ELECTRICITY",
+     "ENERGY_GAS",
+     "WATER_CONSUMPTION",
+     "WASTE",
+     "CO2_TRANSPORT",
+     "WATER_PH"
+    ],
+    "referenceStandards": [
+     "ISO_9001",
+     "ISO_14001",
+     "ISO_45001",
+     "HACCP",
+     "ISO_22000"
+    ],
+    "operationalUnits": [
+     "Production",
+     "Quality",
+     "HSE",
+     "Logistics",
+     "Maintenance",
+     "Warehouse"
+    ],
+    "emissionFactors": {
+     "electricity_kwh": 0.55,
+     "natural_gas_m3": 1.9,
+     "diesel_l": 2.68
+    },
+    "currency": "DZD",
+    "publicQrAccess": true
+   }
+  },
+  {
+   "code": "FOOD_BEVERAGE",
+   "label": "Food & Beverage",
+   "description": "HACCP-oriented quality, cold chain monitoring and hygiene.",
+   "inspectionTemplates": [
+    "QC-INCOMING",
+    "QC-INPROCESS",
+    "QC-FINISHED",
+    "HY-WAREHOUSE",
+    "HY-PERSONNEL",
+    "HY-VEHICLE",
+    "SF-WALK",
+    "EN-COMPLIANCE"
+   ],
+   "settings": {
+    "enabledModules": [
+     "catalog",
+     "inventory",
+     "traceability",
+     "distribution",
+     "fleet",
+     "routes",
+     "assets",
+     "quality",
+     "hygiene",
+     "safety",
+     "environment",
+     "risk",
+     "inspections",
+     "incidents",
+     "nc",
+     "capa",
+     "audits",
+     "documents",
+     "training",
+     "integrations",
+     "analytics",
+     "ai"
+    ],
+    "terminology": {
+     "batch": "Lot",
+     "nonConformity": "Écart HACCP"
+    },
+    "riskCategories": [
+     "Food safety (HACCP)",
+     "Allergen management",
+     "Occupational safety",
+     "Cold chain",
+     "Environmental"
+    ],
+    "hazardCategories": [
+     "MECHANICAL",
+     "ELECTRICAL",
+     "CHEMICAL",
+     "PHYSICAL",
+     "BIOLOGICAL",
+     "ERGONOMIC",
+     "PSYCHOSOCIAL",
+     "FIRE",
+     "ENVIRONMENTAL",
+     "TRAFFIC"
+    ],
+    "qualityCriteria": [
+     "CCP temperature",
+     "Allergen labelling",
+     "Microbiology",
+     "Foreign bodies",
+     "Shelf life"
+    ],
+    "ncTypes": [
+     "PRODUCT",
+     "PROCESS",
+     "SUPPLIER",
+     "CUSTOMER_COMPLAINT",
+     "HYGIENE",
+     "AUDIT"
+    ],
+    "incidentTypes": [
+     "ACCIDENT",
+     "NEAR_MISS",
+     "FIRST_AID",
+     "DANGEROUS_SITUATION",
+     "PROPERTY_DAMAGE",
+     "SPILL",
+     "EMISSION",
+     "FIRE"
+    ],
+    "environmentalIndicators": [
+     "ENERGY_ELECTRICITY",
+     "ENERGY_GAS",
+     "WATER_CONSUMPTION",
+     "WASTE",
+     "CO2_TRANSPORT",
+     "WATER_PH"
+    ],
+    "referenceStandards": [
+     "ISO_22000",
+     "FSSC_22000",
+     "HACCP",
+     "ISO_9001",
+     "ISO_14001",
+     "ISO_45001"
+    ],
+    "operationalUnits": [
+     "Production",
+     "Quality",
+     "Hygiene",
+     "Logistics"
+    ],
+    "emissionFactors": {
+     "electricity_kwh": 0.55,
+     "natural_gas_m3": 1.9,
+     "diesel_l": 2.68
+    },
+    "currency": "DZD",
+    "publicQrAccess": true
+   }
+  },
+  {
+   "code": "PHARMACEUTICAL",
+   "label": "Pharmaceutical",
+   "description": "Batch traceability, GMP inspections, supplier qualification, deviations and CAPA.",
+   "inspectionTemplates": [
+    "QC-INCOMING",
+    "PH-GMP",
+    "QC-FINISHED",
+    "HY-PERSONNEL",
+    "SF-WALK",
+    "SF-FIRE",
+    "EN-COMPLIANCE"
+   ],
+   "settings": {
+    "enabledModules": [
+     "catalog",
+     "inventory",
+     "traceability",
+     "distribution",
+     "assets",
+     "quality",
+     "hygiene",
+     "safety",
+     "environment",
+     "risk",
+     "inspections",
+     "incidents",
+     "nc",
+     "capa",
+     "audits",
+     "documents",
+     "training",
+     "integrations",
+     "analytics",
+     "ai"
+    ],
+    "terminology": {
+     "nonConformity": "Deviation",
+     "capa": "CAPA",
+     "batch": "Batch"
+    },
+    "riskCategories": [
+     "Patient safety",
+     "Data integrity",
+     "Contamination",
+     "Occupational safety",
+     "Environmental"
+    ],
+    "hazardCategories": [
+     "MECHANICAL",
+     "ELECTRICAL",
+     "CHEMICAL",
+     "PHYSICAL",
+     "BIOLOGICAL",
+     "ERGONOMIC",
+     "PSYCHOSOCIAL",
+     "FIRE",
+     "ENVIRONMENTAL",
+     "TRAFFIC"
+    ],
+    "qualityCriteria": [
+     "Assay",
+     "Sterility",
+     "Particle count",
+     "Differential pressure",
+     "Documentation (ALCOA+)"
+    ],
+    "ncTypes": [
+     "DEVIATION",
+     "OOS",
+     "SUPPLIER",
+     "COMPLAINT",
+     "AUDIT",
+     "CHANGE_CONTROL"
+    ],
+    "incidentTypes": [
+     "ACCIDENT",
+     "NEAR_MISS",
+     "FIRST_AID",
+     "DANGEROUS_SITUATION",
+     "PROPERTY_DAMAGE",
+     "SPILL",
+     "EMISSION",
+     "FIRE"
+    ],
+    "environmentalIndicators": [
+     "ENERGY_ELECTRICITY",
+     "ENERGY_GAS",
+     "WATER_CONSUMPTION",
+     "WASTE",
+     "CO2_TRANSPORT",
+     "WATER_PH"
+    ],
+    "referenceStandards": [
+     "GMP",
+     "ISO_9001",
+     "ISO_14001",
+     "ISO_45001",
+     "ICH_Q9",
+     "ICH_Q10"
+    ],
+    "operationalUnits": [
+     "Production",
+     "QA",
+     "QC",
+     "Warehouse",
+     "Engineering"
+    ],
+    "emissionFactors": {
+     "electricity_kwh": 0.55,
+     "natural_gas_m3": 1.9,
+     "diesel_l": 2.68
+    },
+    "currency": "DZD",
+    "publicQrAccess": true
+   }
+  },
+  {
+   "code": "OIL_GAS",
+   "label": "Oil & Gas",
+   "description": "Permit to work, process safety, equipment integrity and environmental monitoring.",
+   "inspectionTemplates": [
+    "OG-PTW",
+    "SF-WALK",
+    "SF-FIRE",
+    "EN-COMPLIANCE"
+   ],
+   "settings": {
+    "enabledModules": [
+     "assets",
+     "safety",
+     "environment",
+     "risk",
+     "inspections",
+     "incidents",
+     "nc",
+     "capa",
+     "audits",
+     "documents",
+     "training",
+     "fleet",
+     "integrations",
+     "analytics",
+     "ai",
+     "inventory",
+     "catalog"
+    ],
+    "terminology": {
+     "site": "Field / facility",
+     "incident": "Event"
+    },
+    "riskCategories": [
+     "Process safety",
+     "Major accident hazards",
+     "Occupational safety",
+     "Environmental",
+     "Security"
+    ],
+    "hazardCategories": [
+     "MECHANICAL",
+     "ELECTRICAL",
+     "CHEMICAL",
+     "PHYSICAL",
+     "BIOLOGICAL",
+     "ERGONOMIC",
+     "PSYCHOSOCIAL",
+     "FIRE",
+     "ENVIRONMENTAL",
+     "TRAFFIC",
+     "PRESSURE",
+     "H2S"
+    ],
+    "qualityCriteria": [
+     "Material certification",
+     "Pressure test",
+     "NDT"
+    ],
+    "ncTypes": [
+     "PROCESS",
+     "EQUIPMENT",
+     "SUPPLIER",
+     "AUDIT",
+     "SAFETY",
+     "ENVIRONMENT"
+    ],
+    "incidentTypes": [
+     "ACCIDENT",
+     "NEAR_MISS",
+     "FIRST_AID",
+     "DANGEROUS_SITUATION",
+     "PROPERTY_DAMAGE",
+     "SPILL",
+     "EMISSION",
+     "FIRE",
+     "LOSS_OF_CONTAINMENT"
+    ],
+    "environmentalIndicators": [
+     "ENERGY_ELECTRICITY",
+     "ENERGY_GAS",
+     "WATER_CONSUMPTION",
+     "WASTE",
+     "CO2_TRANSPORT",
+     "WATER_PH",
+     "FLARING"
+    ],
+    "referenceStandards": [
+     "ISO_45001",
+     "ISO_14001",
+     "ISO_9001",
+     "API",
+     "IOGP"
+    ],
+    "operationalUnits": [
+     "Operations",
+     "Maintenance",
+     "HSE",
+     "Logistics"
+    ],
+    "emissionFactors": {
+     "electricity_kwh": 0.55,
+     "natural_gas_m3": 1.9,
+     "diesel_l": 2.68
+    },
+    "currency": "DZD",
+    "publicQrAccess": true
+   }
+  },
+  {
+   "code": "CONSTRUCTION",
+   "label": "Construction & Building Materials",
+   "description": "Site safety inspections, equipment monitoring, work permits and incident management.",
+   "inspectionTemplates": [
+    "CN-SITE",
+    "SF-WALK",
+    "SF-FIRE",
+    "EN-COMPLIANCE"
+   ],
+   "settings": {
+    "enabledModules": [
+     "assets",
+     "safety",
+     "environment",
+     "risk",
+     "inspections",
+     "incidents",
+     "nc",
+     "capa",
+     "audits",
+     "documents",
+     "training",
+     "fleet",
+     "inventory",
+     "catalog",
+     "analytics",
+     "ai",
+     "integrations"
+    ],
+    "terminology": {
+     "site": "Chantier",
+     "equipment": "Engin"
+    },
+    "riskCategories": [
+     "Work at height",
+     "Excavation",
+     "Lifting",
+     "Traffic",
+     "Environmental"
+    ],
+    "hazardCategories": [
+     "MECHANICAL",
+     "ELECTRICAL",
+     "CHEMICAL",
+     "PHYSICAL",
+     "BIOLOGICAL",
+     "ERGONOMIC",
+     "PSYCHOSOCIAL",
+     "FIRE",
+     "ENVIRONMENTAL",
+     "TRAFFIC",
+     "FALL_FROM_HEIGHT"
+    ],
+    "qualityCriteria": [
+     "Concrete strength",
+     "Dimensional",
+     "Material conformity"
+    ],
+    "ncTypes": [
+     "PROCESS",
+     "MATERIAL",
+     "SUBCONTRACTOR",
+     "AUDIT",
+     "SAFETY"
+    ],
+    "incidentTypes": [
+     "ACCIDENT",
+     "NEAR_MISS",
+     "FIRST_AID",
+     "DANGEROUS_SITUATION",
+     "PROPERTY_DAMAGE",
+     "SPILL",
+     "EMISSION",
+     "FIRE"
+    ],
+    "environmentalIndicators": [
+     "ENERGY_ELECTRICITY",
+     "ENERGY_GAS",
+     "WATER_CONSUMPTION",
+     "WASTE",
+     "CO2_TRANSPORT",
+     "WATER_PH"
+    ],
+    "referenceStandards": [
+     "ISO_45001",
+     "ISO_9001",
+     "ISO_14001"
+    ],
+    "operationalUnits": [
+     "Sites",
+     "Equipment",
+     "HSE",
+     "Procurement"
+    ],
+    "emissionFactors": {
+     "electricity_kwh": 0.55,
+     "natural_gas_m3": 1.9,
+     "diesel_l": 2.68
+    },
+    "currency": "DZD",
+    "publicQrAccess": true
+   }
+  },
+  {
+   "code": "HEALTHCARE",
+   "label": "Healthcare & Medical Products",
+   "description": "Device traceability, complaint handling and vigilance.",
+   "inspectionTemplates": [
+    "QC-INCOMING",
+    "QC-FINISHED",
+    "HY-PERSONNEL",
+    "SF-WALK"
+   ],
+   "settings": {
+    "enabledModules": [
+     "catalog",
+     "inventory",
+     "traceability",
+     "distribution",
+     "assets",
+     "quality",
+     "hygiene",
+     "safety",
+     "risk",
+     "inspections",
+     "incidents",
+     "nc",
+     "capa",
+     "audits",
+     "documents",
+     "training",
+     "analytics",
+     "ai",
+     "integrations"
+    ],
+    "terminology": {
+     "incident": "Adverse event",
+     "customer": "Facility"
+    },
+    "riskCategories": [
+     "Patient safety",
+     "Infection control",
+     "Device safety",
+     "Occupational safety"
+    ],
+    "hazardCategories": [
+     "MECHANICAL",
+     "ELECTRICAL",
+     "CHEMICAL",
+     "PHYSICAL",
+     "BIOLOGICAL",
+     "ERGONOMIC",
+     "PSYCHOSOCIAL",
+     "FIRE",
+     "ENVIRONMENTAL",
+     "TRAFFIC"
+    ],
+    "qualityCriteria": [
+     "Sterility",
+     "Device performance",
+     "UDI labelling"
+    ],
+    "ncTypes": [
+     "PRODUCT",
+     "PROCESS",
+     "COMPLAINT",
+     "VIGILANCE",
+     "AUDIT"
+    ],
+    "incidentTypes": [
+     "ACCIDENT",
+     "NEAR_MISS",
+     "FIRST_AID",
+     "DANGEROUS_SITUATION",
+     "PROPERTY_DAMAGE",
+     "SPILL",
+     "EMISSION",
+     "FIRE",
+     "ADVERSE_EVENT"
+    ],
+    "environmentalIndicators": [
+     "ENERGY_ELECTRICITY",
+     "ENERGY_GAS",
+     "WATER_CONSUMPTION",
+     "WASTE",
+     "CO2_TRANSPORT",
+     "WATER_PH"
+    ],
+    "referenceStandards": [
+     "ISO_13485",
+     "ISO_9001",
+     "ISO_14001",
+     "ISO_45001"
+    ],
+    "operationalUnits": [
+     "Production",
+     "QA",
+     "Regulatory",
+     "Logistics"
+    ],
+    "emissionFactors": {
+     "electricity_kwh": 0.55,
+     "natural_gas_m3": 1.9,
+     "diesel_l": 2.68
+    },
+    "currency": "DZD",
+    "publicQrAccess": true
+   }
+  },
+  {
+   "code": "LOGISTICS",
+   "label": "Logistics & Transportation",
+   "description": "Fleet, routing, delivery performance and road safety.",
+   "inspectionTemplates": [
+    "HY-VEHICLE",
+    "HY-WAREHOUSE",
+    "SF-WALK",
+    "SF-FIRE",
+    "EN-COMPLIANCE"
+   ],
+   "settings": {
+    "enabledModules": [
+     "catalog",
+     "inventory",
+     "traceability",
+     "distribution",
+     "fleet",
+     "routes",
+     "assets",
+     "safety",
+     "environment",
+     "risk",
+     "inspections",
+     "incidents",
+     "nc",
+     "capa",
+     "audits",
+     "documents",
+     "training",
+     "integrations",
+     "analytics",
+     "ai"
+    ],
+    "terminology": {
+     "site": "Hub",
+     "warehouse": "Entrepôt"
+    },
+    "riskCategories": [
+     "Road safety",
+     "Warehouse safety",
+     "Cargo damage",
+     "Environmental"
+    ],
+    "hazardCategories": [
+     "MECHANICAL",
+     "ELECTRICAL",
+     "CHEMICAL",
+     "PHYSICAL",
+     "BIOLOGICAL",
+     "ERGONOMIC",
+     "PSYCHOSOCIAL",
+     "FIRE",
+     "ENVIRONMENTAL",
+     "TRAFFIC"
+    ],
+    "qualityCriteria": [
+     "Delivery quality",
+     "Damage rate"
+    ],
+    "ncTypes": [
+     "DELIVERY",
+     "DAMAGE",
+     "PROCESS",
+     "CUSTOMER_COMPLAINT",
+     "SAFETY"
+    ],
+    "incidentTypes": [
+     "ACCIDENT",
+     "NEAR_MISS",
+     "FIRST_AID",
+     "DANGEROUS_SITUATION",
+     "PROPERTY_DAMAGE",
+     "SPILL",
+     "EMISSION",
+     "FIRE",
+     "ROAD_ACCIDENT"
+    ],
+    "environmentalIndicators": [
+     "ENERGY_ELECTRICITY",
+     "ENERGY_GAS",
+     "WATER_CONSUMPTION",
+     "WASTE",
+     "CO2_TRANSPORT",
+     "WATER_PH"
+    ],
+    "referenceStandards": [
+     "ISO_9001",
+     "ISO_14001",
+     "ISO_45001",
+     "ISO_39001"
+    ],
+    "operationalUnits": [
+     "Hubs",
+     "Fleet",
+     "Warehouses"
+    ],
+    "emissionFactors": {
+     "electricity_kwh": 0.55,
+     "natural_gas_m3": 1.9,
+     "diesel_l": 2.68
+    },
+    "currency": "DZD",
+    "publicQrAccess": true
+   }
+  },
+  {
+   "code": "CHEMICAL",
+   "label": "Chemical Industry",
+   "description": "Chemical products monitoring, process safety, permits and environmental compliance.",
+   "inspectionTemplates": [
+    "QC-INCOMING",
+    "QC-FINISHED",
+    "OG-PTW",
+    "SF-WALK",
+    "SF-FIRE",
+    "EN-COMPLIANCE"
+   ],
+   "settings": {
+    "enabledModules": [
+     "catalog",
+     "inventory",
+     "traceability",
+     "distribution",
+     "fleet",
+     "assets",
+     "quality",
+     "safety",
+     "environment",
+     "risk",
+     "inspections",
+     "incidents",
+     "nc",
+     "capa",
+     "audits",
+     "documents",
+     "training",
+     "integrations",
+     "analytics",
+     "ai"
+    ],
+    "terminology": {
+     "incident": "Event"
+    },
+    "riskCategories": [
+     "Process safety",
+     "Chemical exposure",
+     "Fire & explosion",
+     "Environmental",
+     "Transport of dangerous goods"
+    ],
+    "hazardCategories": [
+     "MECHANICAL",
+     "ELECTRICAL",
+     "CHEMICAL",
+     "PHYSICAL",
+     "BIOLOGICAL",
+     "ERGONOMIC",
+     "PSYCHOSOCIAL",
+     "FIRE",
+     "ENVIRONMENTAL",
+     "TRAFFIC",
+     "TOXIC",
+     "EXPLOSIVE"
+    ],
+    "qualityCriteria": [
+     "Purity",
+     "Viscosity",
+     "pH",
+     "Labelling (CLP/GHS)"
+    ],
+    "ncTypes": [
+     "PRODUCT",
+     "PROCESS",
+     "SUPPLIER",
+     "AUDIT",
+     "SAFETY",
+     "ENVIRONMENT"
+    ],
+    "incidentTypes": [
+     "ACCIDENT",
+     "NEAR_MISS",
+     "FIRST_AID",
+     "DANGEROUS_SITUATION",
+     "PROPERTY_DAMAGE",
+     "SPILL",
+     "EMISSION",
+     "FIRE",
+     "LOSS_OF_CONTAINMENT"
+    ],
+    "environmentalIndicators": [
+     "ENERGY_ELECTRICITY",
+     "ENERGY_GAS",
+     "WATER_CONSUMPTION",
+     "WASTE",
+     "CO2_TRANSPORT",
+     "WATER_PH",
+     "VOC_EMISSIONS"
+    ],
+    "referenceStandards": [
+     "ISO_9001",
+     "ISO_14001",
+     "ISO_45001",
+     "REACH",
+     "SEVESO"
+    ],
+    "operationalUnits": [
+     "Production",
+     "Lab",
+     "HSE",
+     "Logistics"
+    ],
+    "emissionFactors": {
+     "electricity_kwh": 0.55,
+     "natural_gas_m3": 1.9,
+     "diesel_l": 2.68
+    },
+    "currency": "DZD",
+    "publicQrAccess": true
+   }
+  },
+  {
+   "code": "RETAIL_DISTRIBUTION",
+   "label": "Retail & Distribution",
+   "description": "Store hygiene, product recall, cold chain and distribution.",
+   "inspectionTemplates": [
+    "HY-WAREHOUSE",
+    "HY-VEHICLE",
+    "SF-WALK",
+    "SF-FIRE"
+   ],
+   "settings": {
+    "enabledModules": [
+     "catalog",
+     "inventory",
+     "traceability",
+     "distribution",
+     "fleet",
+     "routes",
+     "hygiene",
+     "safety",
+     "environment",
+     "inspections",
+     "incidents",
+     "nc",
+     "capa",
+     "audits",
+     "documents",
+     "training",
+     "integrations",
+     "analytics",
+     "ai"
+    ],
+    "terminology": {
+     "site": "Store",
+     "customer": "Point of sale"
+    },
+    "riskCategories": [
+     "Customer safety",
+     "Food safety",
+     "Occupational safety",
+     "Security"
+    ],
+    "hazardCategories": [
+     "MECHANICAL",
+     "ELECTRICAL",
+     "CHEMICAL",
+     "PHYSICAL",
+     "BIOLOGICAL",
+     "ERGONOMIC",
+     "PSYCHOSOCIAL",
+     "FIRE",
+     "ENVIRONMENTAL",
+     "TRAFFIC"
+    ],
+    "qualityCriteria": [
+     "Shelf life",
+     "Cold chain",
+     "Labelling"
+    ],
+    "ncTypes": [
+     "PRODUCT",
+     "SUPPLIER",
+     "STORE",
+     "CUSTOMER_COMPLAINT",
+     "HYGIENE"
+    ],
+    "incidentTypes": [
+     "ACCIDENT",
+     "NEAR_MISS",
+     "FIRST_AID",
+     "DANGEROUS_SITUATION",
+     "PROPERTY_DAMAGE",
+     "SPILL",
+     "EMISSION",
+     "FIRE"
+    ],
+    "environmentalIndicators": [
+     "ENERGY_ELECTRICITY",
+     "ENERGY_GAS",
+     "WATER_CONSUMPTION",
+     "WASTE",
+     "CO2_TRANSPORT",
+     "WATER_PH"
+    ],
+    "referenceStandards": [
+     "ISO_9001",
+     "ISO_14001",
+     "ISO_45001"
+    ],
+    "operationalUnits": [
+     "Stores",
+     "Warehouses",
+     "Fleet"
+    ],
+    "emissionFactors": {
+     "electricity_kwh": 0.55,
+     "natural_gas_m3": 1.9,
+     "diesel_l": 2.68
+    },
+    "currency": "DZD",
+    "publicQrAccess": true
+   }
+  }
+ ],
+ "inspectionTemplates": [
+  {
+   "code": "QC-INCOMING",
+   "name": "Incoming raw material inspection",
+   "domain": "QUALITY",
+   "inspectionType": "INCOMING",
+   "description": "Reception control of raw materials and packaging (ISO 9001 §8.4).",
+   "passingScore": 85,
+   "questions": [
+    {
+     "id": "q1",
+     "text": "Delivery note and certificate of analysis (CoA) present and matching the order",
+     "type": "YES_NO",
+     "required": true,
+     "weight": 1
+    },
+    {
+     "id": "q2",
+     "text": "Packaging intact, clean and correctly labelled (lot, expiry)",
+     "type": "YES_NO",
+     "required": true,
+     "weight": 1,
+     "critical": true
+    },
+    {
+     "id": "q3",
+     "text": "Transport vehicle clean, dry and free of pests",
+     "type": "YES_NO",
+     "required": true,
+     "weight": 1,
+     "critical": true
+    },
+    {
+     "id": "q4",
+     "text": "Product temperature at reception (°C)",
+     "type": "NUMERIC",
+     "required": true,
+     "weight": 1,
+     "min": 0,
+     "max": 25,
+     "unit": "°C",
+     "createNc": true
+    },
+    {
+     "id": "q5",
+     "text": "Moisture content (%)",
+     "type": "NUMERIC",
+     "required": true,
+     "weight": 2,
+     "min": 0,
+     "max": 14.5,
+     "unit": "%",
+     "createNc": true
+    },
+    {
+     "id": "q6",
+     "text": "Visual aspect conforms to specification",
+     "type": "PASS_FAIL",
+     "required": true,
+     "weight": 2,
+     "createNc": true
+    },
+    {
+     "id": "q7",
+     "text": "Foreign bodies detected?",
+     "type": "YES_NO",
+     "required": true,
+     "weight": 1,
+     "expected": "NO",
+     "critical": true
+    },
+    {
+     "id": "q8",
+     "text": "Describe the foreign body",
+     "type": "TEXT",
+     "required": false,
+     "weight": 1,
+     "condition": {
+      "questionId": "q7",
+      "equals": "YES"
+     }
+    },
+    {
+     "id": "q9",
+     "text": "Photo of the lot label",
+     "type": "PHOTO",
+     "required": false,
+     "weight": 1
+    },
+    {
+     "id": "q10",
+     "text": "Inspector signature",
+     "type": "SIGNATURE",
+     "required": true,
+     "weight": 1
+    }
+   ]
+  },
+  {
+   "code": "QC-INPROCESS",
+   "name": "In-process quality control",
+   "domain": "QUALITY",
+   "inspectionType": "IN_PROCESS",
+   "description": "Hourly line control (weights, sealing, coding).",
+   "passingScore": 85,
+   "questions": [
+    {
+     "id": "q1",
+     "text": "Average net weight within tolerance (g)",
+     "type": "NUMERIC",
+     "required": true,
+     "weight": 2,
+     "min": 495,
+     "max": 515,
+     "unit": "g",
+     "createNc": true
+    },
+    {
+     "id": "q2",
+     "text": "Sealing integrity test",
+     "type": "PASS_FAIL",
+     "required": true,
+     "weight": 1,
+     "critical": true
+    },
+    {
+     "id": "q3",
+     "text": "Lot and expiry coding legible on 10 samples",
+     "type": "PASS_FAIL",
+     "required": true,
+     "weight": 1,
+     "createNc": true
+    },
+    {
+     "id": "q4",
+     "text": "Metal detector test with Fe/Non-Fe/SS test pieces",
+     "type": "PASS_FAIL",
+     "required": true,
+     "weight": 1,
+     "critical": true
+    },
+    {
+     "id": "q5",
+     "text": "Product temperature after dryer (°C)",
+     "type": "NUMERIC",
+     "required": true,
+     "weight": 1,
+     "min": 20,
+     "max": 45,
+     "unit": "°C"
+    },
+    {
+     "id": "q6",
+     "text": "Line clearance performed at changeover",
+     "type": "YES_NO",
+     "required": true,
+     "weight": 1
+    },
+    {
+     "id": "q7",
+     "text": "Defects observed",
+     "type": "MULTI_SELECT",
+     "required": false,
+     "weight": 1,
+     "options": [
+      "None",
+      "Broken pieces",
+      "Colour deviation",
+      "Under-weight",
+      "Poor sealing"
+     ],
+     "failOptions": [
+      "Under-weight",
+      "Poor sealing"
+     ]
+    },
+    {
+     "id": "q8",
+     "text": "Operator signature",
+     "type": "SIGNATURE",
+     "required": true,
+     "weight": 1
+    }
+   ]
+  },
+  {
+   "code": "QC-FINISHED",
+   "name": "Finished product release inspection",
+   "domain": "QUALITY",
+   "inspectionType": "FINISHED_PRODUCT",
+   "description": "Batch release check before shipment.",
+   "passingScore": 85,
+   "questions": [
+    {
+     "id": "q1",
+     "text": "Organoleptic test (aspect, odour, taste)",
+     "type": "PASS_FAIL",
+     "required": true,
+     "weight": 2
+    },
+    {
+     "id": "q2",
+     "text": "Moisture of finished product (%)",
+     "type": "NUMERIC",
+     "required": true,
+     "weight": 1,
+     "min": 0,
+     "max": 12.5,
+     "unit": "%",
+     "createNc": true
+    },
+    {
+     "id": "q3",
+     "text": "Labelling complies with regulation (composition, allergens, lot, DLC)",
+     "type": "YES_NO",
+     "required": true,
+     "weight": 1,
+     "critical": true
+    },
+    {
+     "id": "q4",
+     "text": "Pallet stability and stretch film",
+     "type": "PASS_FAIL",
+     "required": true,
+     "weight": 1
+    },
+    {
+     "id": "q5",
+     "text": "Microbiological results conform",
+     "type": "YES_NO",
+     "required": true,
+     "weight": 1,
+     "critical": true
+    },
+    {
+     "id": "q6",
+     "text": "Retention samples taken",
+     "type": "YES_NO",
+     "required": true,
+     "weight": 1
+    },
+    {
+     "id": "q7",
+     "text": "Release decision signature",
+     "type": "SIGNATURE",
+     "required": true,
+     "weight": 1
+    }
+   ]
+  },
+  {
+   "code": "HY-WAREHOUSE",
+   "name": "Warehouse hygiene inspection",
+   "domain": "HYGIENE",
+   "inspectionType": "HYGIENE",
+   "description": "Weekly hygiene inspection of storage areas (HACCP prerequisite programmes).",
+   "passingScore": 90,
+   "questions": [
+    {
+     "id": "q1",
+     "text": "Floors, racks and walls clean",
+     "type": "PASS_FAIL",
+     "required": true,
+     "weight": 2
+    },
+    {
+     "id": "q2",
+     "text": "No evidence of pests (droppings, insects, damage)",
+     "type": "YES_NO",
+     "required": true,
+     "weight": 1,
+     "critical": true
+    },
+    {
+     "id": "q3",
+     "text": "Bait stations in place and checked",
+     "type": "YES_NO",
+     "required": true,
+     "weight": 1
+    },
+    {
+     "id": "q4",
+     "text": "Products stored off the floor and away from walls",
+     "type": "YES_NO",
+     "required": true,
+     "weight": 1
+    },
+    {
+     "id": "q5",
+     "text": "Ambient temperature (°C)",
+     "type": "NUMERIC",
+     "required": true,
+     "weight": 1,
+     "min": 10,
+     "max": 25,
+     "unit": "°C",
+     "createNc": true
+    },
+    {
+     "id": "q6",
+     "text": "Relative humidity (%)",
+     "type": "NUMERIC",
+     "required": true,
+     "weight": 1,
+     "min": 30,
+     "max": 65,
+     "unit": "%"
+    },
+    {
+     "id": "q7",
+     "text": "Doors and dock seals closed / pest-proof",
+     "type": "YES_NO",
+     "required": true,
+     "weight": 1
+    },
+    {
+     "id": "q8",
+     "text": "Waste bins emptied and covered",
+     "type": "YES_NO",
+     "required": true,
+     "weight": 1
+    },
+    {
+     "id": "q9",
+     "text": "Photo evidence",
+     "type": "PHOTO",
+     "required": false,
+     "weight": 1
+    },
+    {
+     "id": "q10",
+     "text": "Inspector signature",
+     "type": "SIGNATURE",
+     "required": true,
+     "weight": 1
+    }
+   ]
+  },
+  {
+   "code": "HY-PERSONNEL",
+   "name": "Personnel hygiene check",
+   "domain": "HYGIENE",
+   "inspectionType": "HYGIENE",
+   "description": "Daily personnel hygiene control at production entry.",
+   "passingScore": 95,
+   "questions": [
+    {
+     "id": "q1",
+     "text": "Clean work clothes, hair net and beard cover worn",
+     "type": "YES_NO",
+     "required": true,
+     "weight": 1,
+     "critical": true
+    },
+    {
+     "id": "q2",
+     "text": "Hands washed and disinfected at entry",
+     "type": "YES_NO",
+     "required": true,
+     "weight": 1,
+     "critical": true
+    },
+    {
+     "id": "q3",
+     "text": "No jewellery, watches or personal items",
+     "type": "YES_NO",
+     "required": true,
+     "weight": 1
+    },
+    {
+     "id": "q4",
+     "text": "Wounds covered with detectable blue plasters",
+     "type": "YES_NO",
+     "required": true,
+     "weight": 1
+    },
+    {
+     "id": "q5",
+     "text": "Medical fitness certificate valid",
+     "type": "YES_NO",
+     "required": true,
+     "weight": 1
+    },
+    {
+     "id": "q6",
+     "text": "Number of operators checked",
+     "type": "NUMERIC",
+     "required": false,
+     "weight": 1
+    }
+   ]
+  },
+  {
+   "code": "HY-VEHICLE",
+   "name": "Delivery vehicle hygiene check",
+   "domain": "HYGIENE",
+   "inspectionType": "VEHICLE",
+   "description": "Hygiene check of delivery vehicles before loading.",
+   "passingScore": 90,
+   "questions": [
+    {
+     "id": "q1",
+     "text": "Cargo area clean and dry",
+     "type": "PASS_FAIL",
+     "required": true,
+     "weight": 2,
+     "critical": true
+    },
+    {
+     "id": "q2",
+     "text": "No odour, no pest presence",
+     "type": "YES_NO",
+     "required": true,
+     "weight": 1,
+     "critical": true
+    },
+    {
+     "id": "q3",
+     "text": "Cargo area temperature (°C)",
+     "type": "NUMERIC",
+     "required": true,
+     "weight": 1,
+     "min": 0,
+     "max": 25,
+     "unit": "°C"
+    },
+    {
+     "id": "q4",
+     "text": "Cleaning log of the vehicle up to date",
+     "type": "YES_NO",
+     "required": true,
+     "weight": 1
+    },
+    {
+     "id": "q5",
+     "text": "Driver signature",
+     "type": "SIGNATURE",
+     "required": true,
+     "weight": 1
+    }
+   ]
+  },
+  {
+   "code": "SF-WALK",
+   "name": "Safety walk (HSE tour)",
+   "domain": "SAFETY",
+   "inspectionType": "SAFETY",
+   "description": "Monthly safety inspection of workshops (ISO 45001 §9.1).",
+   "passingScore": 85,
+   "questions": [
+    {
+     "id": "q1",
+     "text": "Emergency exits and routes free and signposted",
+     "type": "YES_NO",
+     "required": true,
+     "weight": 1,
+     "critical": true
+    },
+    {
+     "id": "q2",
+     "text": "Machine guards in place and interlocks functional",
+     "type": "YES_NO",
+     "required": true,
+     "weight": 1,
+     "critical": true
+    },
+    {
+     "id": "q3",
+     "text": "PPE worn by all personnel (shoes, gloves, ear protection)",
+     "type": "PASS_FAIL",
+     "required": true,
+     "weight": 2
+    },
+    {
+     "id": "q4",
+     "text": "Forklift traffic lanes marked and respected",
+     "type": "YES_NO",
+     "required": true,
+     "weight": 1
+    },
+    {
+     "id": "q5",
+     "text": "Chemicals stored with retention and SDS available",
+     "type": "YES_NO",
+     "required": true,
+     "weight": 1
+    },
+    {
+     "id": "q6",
+     "text": "Housekeeping (5S) acceptable",
+     "type": "PASS_FAIL",
+     "required": true,
+     "weight": 1
+    },
+    {
+     "id": "q7",
+     "text": "Electrical cabinets closed, no damaged cables",
+     "type": "YES_NO",
+     "required": true,
+     "weight": 1,
+     "critical": true
+    },
+    {
+     "id": "q8",
+     "text": "Number of unsafe acts observed",
+     "type": "NUMERIC",
+     "required": true,
+     "weight": 1,
+     "min": 0,
+     "max": 0,
+     "createNc": true
+    },
+    {
+     "id": "q9",
+     "text": "Photo evidence",
+     "type": "PHOTO",
+     "required": false,
+     "weight": 1
+    },
+    {
+     "id": "q10",
+     "text": "Inspector signature",
+     "type": "SIGNATURE",
+     "required": true,
+     "weight": 1
+    }
+   ]
+  },
+  {
+   "code": "SF-FIRE",
+   "name": "Fire safety inspection",
+   "domain": "SAFETY",
+   "inspectionType": "SAFETY",
+   "description": "Quarterly fire safety and emergency equipment inspection.",
+   "passingScore": 90,
+   "questions": [
+    {
+     "id": "q1",
+     "text": "Extinguishers present, accessible and within inspection date",
+     "type": "YES_NO",
+     "required": true,
+     "weight": 1,
+     "critical": true
+    },
+    {
+     "id": "q2",
+     "text": "Fire hose reels and hydrants operational",
+     "type": "YES_NO",
+     "required": true,
+     "weight": 1,
+     "critical": true
+    },
+    {
+     "id": "q3",
+     "text": "Fire alarm tested this quarter",
+     "type": "YES_NO",
+     "required": true,
+     "weight": 1
+    },
+    {
+     "id": "q4",
+     "text": "Emergency lighting functional",
+     "type": "YES_NO",
+     "required": true,
+     "weight": 1
+    },
+    {
+     "id": "q5",
+     "text": "Evacuation plan displayed and up to date",
+     "type": "YES_NO",
+     "required": true,
+     "weight": 1
+    },
+    {
+     "id": "q6",
+     "text": "Last evacuation drill within 6 months",
+     "type": "YES_NO",
+     "required": true,
+     "weight": 1
+    },
+    {
+     "id": "q7",
+     "text": "Inspector signature",
+     "type": "SIGNATURE",
+     "required": true,
+     "weight": 1
+    }
+   ]
+  },
+  {
+   "code": "EN-COMPLIANCE",
+   "name": "Environmental compliance inspection",
+   "domain": "ENVIRONMENT",
+   "inspectionType": "ENVIRONMENT",
+   "description": "Monthly environmental inspection (ISO 14001 §9.1.2).",
+   "passingScore": 85,
+   "questions": [
+    {
+     "id": "q1",
+     "text": "Waste segregated by category in labelled containers",
+     "type": "YES_NO",
+     "required": true,
+     "weight": 2
+    },
+    {
+     "id": "q2",
+     "text": "Hazardous waste stored in covered area with retention",
+     "type": "YES_NO",
+     "required": true,
+     "weight": 1,
+     "critical": true
+    },
+    {
+     "id": "q3",
+     "text": "Waste manifests (bordereaux) archived",
+     "type": "YES_NO",
+     "required": true,
+     "weight": 1
+    },
+    {
+     "id": "q4",
+     "text": "No spill or leakage observed",
+     "type": "YES_NO",
+     "required": true,
+     "weight": 1,
+     "critical": true
+    },
+    {
+     "id": "q5",
+     "text": "Wastewater pH at outlet",
+     "type": "NUMERIC",
+     "required": true,
+     "weight": 1,
+     "min": 6.5,
+     "max": 8.5,
+     "unit": "pH",
+     "createNc": true
+    },
+    {
+     "id": "q6",
+     "text": "Compressed-air leaks detected?",
+     "type": "YES_NO",
+     "required": true,
+     "weight": 1,
+     "expected": "NO"
+    },
+    {
+     "id": "q7",
+     "text": "Spill kits complete and accessible",
+     "type": "YES_NO",
+     "required": true,
+     "weight": 1
+    },
+    {
+     "id": "q8",
+     "text": "Inspector signature",
+     "type": "SIGNATURE",
+     "required": true,
+     "weight": 1
+    }
+   ]
+  },
+  {
+   "code": "PH-GMP",
+   "name": "GMP cleanroom inspection",
+   "domain": "QUALITY",
+   "inspectionType": "IN_PROCESS",
+   "description": "Good Manufacturing Practice inspection for pharmaceutical areas.",
+   "passingScore": 95,
+   "questions": [
+    {
+     "id": "q1",
+     "text": "Differential pressure within limits (Pa)",
+     "type": "NUMERIC",
+     "required": true,
+     "weight": 1,
+     "min": 10,
+     "max": 30,
+     "unit": "Pa",
+     "critical": true
+    },
+    {
+     "id": "q2",
+     "text": "Particle count conforms to grade",
+     "type": "PASS_FAIL",
+     "required": true,
+     "weight": 1,
+     "critical": true
+    },
+    {
+     "id": "q3",
+     "text": "Gowning procedure respected",
+     "type": "YES_NO",
+     "required": true,
+     "weight": 1,
+     "critical": true
+    },
+    {
+     "id": "q4",
+     "text": "Batch record completed contemporaneously",
+     "type": "YES_NO",
+     "required": true,
+     "weight": 1
+    },
+    {
+     "id": "q5",
+     "text": "Equipment calibration status valid",
+     "type": "YES_NO",
+     "required": true,
+     "weight": 1
+    },
+    {
+     "id": "q6",
+     "text": "QA signature",
+     "type": "SIGNATURE",
+     "required": true,
+     "weight": 1
+    }
+   ]
+  },
+  {
+   "code": "CN-SITE",
+   "name": "Construction site safety inspection",
+   "domain": "SAFETY",
+   "inspectionType": "SAFETY",
+   "description": "Daily construction site safety inspection.",
+   "passingScore": 85,
+   "questions": [
+    {
+     "id": "q1",
+     "text": "Scaffolding inspected and tagged",
+     "type": "YES_NO",
+     "required": true,
+     "weight": 1,
+     "critical": true
+    },
+    {
+     "id": "q2",
+     "text": "Fall protection used for work at height",
+     "type": "YES_NO",
+     "required": true,
+     "weight": 1,
+     "critical": true
+    },
+    {
+     "id": "q3",
+     "text": "Excavations shored and barricaded",
+     "type": "YES_NO",
+     "required": true,
+     "weight": 1,
+     "critical": true
+    },
+    {
+     "id": "q4",
+     "text": "Lifting equipment certificates valid",
+     "type": "YES_NO",
+     "required": true,
+     "weight": 1
+    },
+    {
+     "id": "q5",
+     "text": "Site access controlled, visitors inducted",
+     "type": "YES_NO",
+     "required": true,
+     "weight": 1
+    },
+    {
+     "id": "q6",
+     "text": "Supervisor signature",
+     "type": "SIGNATURE",
+     "required": true,
+     "weight": 1
+    }
+   ]
+  },
+  {
+   "code": "OG-PTW",
+   "name": "Permit-to-work compliance audit",
+   "domain": "SAFETY",
+   "inspectionType": "SAFETY",
+   "description": "Field verification of permits to work (oil & gas, chemical).",
+   "passingScore": 85,
+   "questions": [
+    {
+     "id": "q1",
+     "text": "Permit displayed at worksite",
+     "type": "YES_NO",
+     "required": true,
+     "weight": 1,
+     "critical": true
+    },
+    {
+     "id": "q2",
+     "text": "Gas test performed and recorded",
+     "type": "YES_NO",
+     "required": true,
+     "weight": 1,
+     "critical": true
+    },
+    {
+     "id": "q3",
+     "text": "Isolations (LOTO) verified",
+     "type": "YES_NO",
+     "required": true,
+     "weight": 1,
+     "critical": true
+    },
+    {
+     "id": "q4",
+     "text": "Fire watch present for hot work",
+     "type": "YES_NO",
+     "required": false,
+     "weight": 1
+    },
+    {
+     "id": "q5",
+     "text": "Toolbox talk recorded",
+     "type": "YES_NO",
+     "required": true,
+     "weight": 1
+    },
+    {
+     "id": "q6",
+     "text": "Verifier signature",
+     "type": "SIGNATURE",
+     "required": true,
+     "weight": 1
+    }
+   ]
+  }
+ ]
+}

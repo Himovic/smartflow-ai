@@ -1,0 +1,105 @@
+[
+  {
+    "workflowKey": "NON_CONFORMITY", "name": "Quality non-conformity", "entityType": "NonConformity", "initialState": "REPORTED",
+    "description": "Report → qualification & assignment → root cause analysis → action plan (CAPA) → verification → closure.",
+    "states": [
+      {"code": "REPORTED", "label": "Reported", "color": "#64748b"},
+      {"code": "ASSIGNED", "label": "Assigned", "color": "#0ea5e9"},
+      {"code": "ROOT_CAUSE_ANALYSIS", "label": "Root cause analysis", "color": "#6366f1"},
+      {"code": "ACTION_PLAN", "label": "Action plan", "color": "#f59e0b"},
+      {"code": "PENDING_VERIFICATION", "label": "Pending verification", "color": "#14b8a6"},
+      {"code": "CLOSED", "label": "Closed", "color": "#22c55e", "terminal": true},
+      {"code": "CANCELLED", "label": "Cancelled", "color": "#94a3b8", "terminal": true}
+    ],
+    "transitions": [
+      {"code": "qualify", "label": "Qualify & assign", "from": ["REPORTED"], "to": "ASSIGNED", "permission": "nc:approve",
+       "fields": ["severity", "assigneeUserId", "assigneeName", "dueDate", "immediateAction"], "requiredFields": ["assigneeName", "dueDate"]},
+      {"code": "start_analysis", "label": "Start root cause analysis", "from": ["ASSIGNED"], "to": "ROOT_CAUSE_ANALYSIS", "permission": "nc:write"},
+      {"code": "submit_rca", "label": "Validate root cause", "from": ["ROOT_CAUSE_ANALYSIS"], "to": "ACTION_PLAN", "permission": "nc:write",
+       "fields": ["rootCause", "rootCauseMethod", "fiveWhys"], "requiredFields": ["rootCause"]},
+      {"code": "submit_verification", "label": "Request verification", "from": ["ACTION_PLAN"], "to": "PENDING_VERIFICATION", "permission": "nc:write",
+       "guards": ["capasCompleted"]},
+      {"code": "close", "label": "Verify & close", "from": ["PENDING_VERIFICATION"], "to": "CLOSED", "permission": "nc:approve", "requiresComment": true},
+      {"code": "reject_verification", "label": "Reject — actions insufficient", "from": ["PENDING_VERIFICATION"], "to": "ACTION_PLAN", "permission": "nc:approve", "requiresComment": true},
+      {"code": "cancel", "label": "Cancel (not a non-conformity)", "from": ["REPORTED", "ASSIGNED"], "to": "CANCELLED", "permission": "nc:approve", "requiresComment": true}
+    ]
+  },
+  {
+    "workflowKey": "CAPA", "name": "Corrective / preventive action", "entityType": "CapaAction", "initialState": "OPEN",
+    "description": "Open → in progress → evidence submitted → effectiveness verification → closed.",
+    "states": [
+      {"code": "OPEN", "label": "Open", "color": "#64748b"},
+      {"code": "IN_PROGRESS", "label": "In progress", "color": "#0ea5e9"},
+      {"code": "PENDING_VERIFICATION", "label": "Pending verification", "color": "#14b8a6"},
+      {"code": "CLOSED", "label": "Closed — effective", "color": "#22c55e", "terminal": true},
+      {"code": "CANCELLED", "label": "Cancelled", "color": "#94a3b8", "terminal": true}
+    ],
+    "transitions": [
+      {"code": "start", "label": "Start", "from": ["OPEN"], "to": "IN_PROGRESS", "permission": "capa:write"},
+      {"code": "submit", "label": "Submit evidence", "from": ["IN_PROGRESS"], "to": "PENDING_VERIFICATION", "permission": "capa:write",
+       "fields": ["evidenceNote"], "requiresEvidence": true},
+      {"code": "verify_effective", "label": "Verify — effective", "from": ["PENDING_VERIFICATION"], "to": "CLOSED", "permission": "capa:approve",
+       "fields": ["effectivenessResult", "effectivenessComment"]},
+      {"code": "verify_ineffective", "label": "Verify — not effective", "from": ["PENDING_VERIFICATION"], "to": "IN_PROGRESS", "permission": "capa:approve", "requiresComment": true},
+      {"code": "cancel", "label": "Cancel", "from": ["OPEN", "IN_PROGRESS"], "to": "CANCELLED", "permission": "capa:approve", "requiresComment": true}
+    ]
+  },
+  {
+    "workflowKey": "SAFETY_INCIDENT", "name": "Safety / hygiene incident", "entityType": "Incident", "initialState": "REPORTED",
+    "description": "Report → investigation → root cause & corrective measures → effectiveness verification → closure.",
+    "states": [
+      {"code": "REPORTED", "label": "Reported", "color": "#64748b"},
+      {"code": "UNDER_INVESTIGATION", "label": "Under investigation", "color": "#6366f1"},
+      {"code": "ACTIONS_IN_PROGRESS", "label": "Corrective measures", "color": "#f59e0b"},
+      {"code": "PENDING_VERIFICATION", "label": "Effectiveness verification", "color": "#14b8a6"},
+      {"code": "CLOSED", "label": "Closed", "color": "#22c55e", "terminal": true}
+    ],
+    "transitions": [
+      {"code": "start_investigation", "label": "Start investigation", "from": ["REPORTED"], "to": "UNDER_INVESTIGATION", "permission": "incidents:approve",
+       "fields": ["investigatorName", "investigatorUserId", "severity", "probability", "immediateActions", "dueDate"], "requiredFields": ["investigatorName"]},
+      {"code": "document_root_cause", "label": "Document root cause", "from": ["UNDER_INVESTIGATION"], "to": "ACTIONS_IN_PROGRESS", "permission": "incidents:write",
+       "fields": ["rootCause", "investigationFindings", "impactAssessment"], "requiredFields": ["rootCause"]},
+      {"code": "submit_verification", "label": "Request effectiveness verification", "from": ["ACTIONS_IN_PROGRESS"], "to": "PENDING_VERIFICATION",
+       "permission": "incidents:write", "guards": ["capasCompleted"]},
+      {"code": "close", "label": "Close & report", "from": ["PENDING_VERIFICATION"], "to": "CLOSED", "permission": "incidents:approve", "requiresComment": true},
+      {"code": "close_minor", "label": "Close (no investigation required)", "from": ["REPORTED"], "to": "CLOSED", "permission": "incidents:approve", "requiresComment": true}
+    ]
+  },
+  {
+    "workflowKey": "ENVIRONMENTAL_INCIDENT", "name": "Environmental incident", "entityType": "Incident", "initialState": "REPORTED",
+    "description": "Report → impact evaluation → investigation → corrective measures → closure with environmental report.",
+    "states": [
+      {"code": "REPORTED", "label": "Reported", "color": "#64748b"},
+      {"code": "IMPACT_ASSESSMENT", "label": "Impact assessment", "color": "#0ea5e9"},
+      {"code": "UNDER_INVESTIGATION", "label": "Under investigation", "color": "#6366f1"},
+      {"code": "ACTIONS_IN_PROGRESS", "label": "Corrective measures", "color": "#f59e0b"},
+      {"code": "CLOSED", "label": "Closed", "color": "#22c55e", "terminal": true}
+    ],
+    "transitions": [
+      {"code": "assess_impact", "label": "Evaluate impact", "from": ["REPORTED"], "to": "IMPACT_ASSESSMENT", "permission": "environment:write",
+       "fields": ["impactAssessment", "envCategory", "severity", "probability", "immediateActions"], "requiredFields": ["impactAssessment"]},
+      {"code": "start_investigation", "label": "Start investigation", "from": ["IMPACT_ASSESSMENT"], "to": "UNDER_INVESTIGATION", "permission": "incidents:approve",
+       "fields": ["investigatorName", "investigatorUserId", "dueDate"], "requiredFields": ["investigatorName"]},
+      {"code": "document_root_cause", "label": "Document root cause", "from": ["UNDER_INVESTIGATION"], "to": "ACTIONS_IN_PROGRESS", "permission": "incidents:write",
+       "fields": ["rootCause", "investigationFindings"], "requiredFields": ["rootCause"]},
+      {"code": "close", "label": "Close & issue report", "from": ["ACTIONS_IN_PROGRESS"], "to": "CLOSED", "permission": "incidents:approve",
+       "requiresComment": true, "guards": ["capasCompleted"]}
+    ]
+  },
+  {
+    "workflowKey": "DOCUMENT_APPROVAL", "name": "Document approval", "entityType": "QhseDocument", "initialState": "DRAFT",
+    "description": "Draft → review → approval; approving a new version makes the previous one obsolete.",
+    "states": [
+      {"code": "DRAFT", "label": "Draft", "color": "#64748b"},
+      {"code": "IN_REVIEW", "label": "In review", "color": "#f59e0b"},
+      {"code": "APPROVED", "label": "Approved", "color": "#22c55e"},
+      {"code": "OBSOLETE", "label": "Obsolete", "color": "#94a3b8", "terminal": true}
+    ],
+    "transitions": [
+      {"code": "submit_review", "label": "Submit for review", "from": ["DRAFT"], "to": "IN_REVIEW", "permission": "documents:write"},
+      {"code": "approve", "label": "Approve", "from": ["IN_REVIEW"], "to": "APPROVED", "permission": "documents:approve"},
+      {"code": "request_changes", "label": "Request changes", "from": ["IN_REVIEW"], "to": "DRAFT", "permission": "documents:approve", "requiresComment": true},
+      {"code": "make_obsolete", "label": "Withdraw (obsolete)", "from": ["APPROVED"], "to": "OBSOLETE", "permission": "documents:approve", "requiresComment": true}
+    ]
+  }
+]

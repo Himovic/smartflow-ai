@@ -1,0 +1,14 @@
+[
+  {"code": "OTD_RATE", "name": "On-time delivery rate", "domain": "DISTRIBUTION", "unit": "%", "target": 95, "direction": "HIGHER_IS_BETTER", "calculator": "deliveries.onTime"},
+  {"code": "FLEET_UTILIZATION", "name": "Fleet utilization", "domain": "DISTRIBUTION", "unit": "%", "target": 80, "direction": "HIGHER_IS_BETTER", "calculator": "fleet.utilization"},
+  {"code": "CO2_PER_DELIVERY", "name": "CO2 per delivery", "domain": "ENVIRONMENT", "unit": "kg", "target": 45, "direction": "LOWER_IS_BETTER", "calculator": "deliveries.co2PerDelivery"},
+  {"code": "NC_OPEN", "name": "Open non-conformities", "domain": "QUALITY", "unit": "", "target": 25, "direction": "LOWER_IS_BETTER", "calculator": "nc.open"},
+  {"code": "FIRST_PASS_YIELD", "name": "Quality inspection pass rate", "domain": "QUALITY", "unit": "%", "target": 92, "direction": "HIGHER_IS_BETTER", "calculator": "inspections.passRate.QUALITY"},
+  {"code": "INSPECTION_PASS_RATE", "name": "Inspection compliance", "domain": "QHSE", "unit": "%", "target": 90, "direction": "HIGHER_IS_BETTER", "calculator": "inspections.passRate"},
+  {"code": "HYGIENE_COMPLIANCE", "name": "Hygiene compliance", "domain": "HYGIENE", "unit": "%", "target": 95, "direction": "HIGHER_IS_BETTER", "calculator": "inspections.passRate.HYGIENE"},
+  {"code": "CAPA_COMPLETION", "name": "CAPA completion rate", "domain": "QHSE", "unit": "%", "target": 85, "direction": "HIGHER_IS_BETTER", "calculator": "capa.completion"},
+  {"code": "CAPA_OVERDUE", "name": "Overdue CAPA", "domain": "QHSE", "unit": "", "target": 5, "direction": "LOWER_IS_BETTER", "calculator": "capa.overdue"},
+  {"code": "LTIFR", "name": "Lost time injury frequency rate", "domain": "SAFETY", "unit": "", "target": 2.0, "direction": "LOWER_IS_BETTER", "calculator": "safety.ltifr"},
+  {"code": "RECYCLING_RATE", "name": "Waste recycling rate", "domain": "ENVIRONMENT", "unit": "%", "target": 60, "direction": "HIGHER_IS_BETTER", "calculator": "waste.recycling"},
+  {"code": "AUDIT_SCORE", "name": "Average audit score", "domain": "QHSE", "unit": "%", "target": 85, "direction": "HIGHER_IS_BETTER", "calculator": "audits.score"}
+]

@@ -1,0 +1,18 @@
+# Build outputs
+backend/target/
+frontend/dist/
+frontend/.angular/
+frontend/node_modules/
+ai-service/.venv/
+**/__pycache__/
+*.pyc
+# Runtime data & secrets
+data/
+backend/data/
+.env
+*.env.local
+# IDE
+.idea/
+.vscode/
+*.iml
+.DS_Store
