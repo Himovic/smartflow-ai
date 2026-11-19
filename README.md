@@ -72,7 +72,7 @@ Tests: `cd backend && mvn verify` (set `SMARTFLOW_IT=true` and `IT_DB_URL` to al
                  └──► External systems: SAP S/4HANA (OData), Odoo (JSON-RPC), CMMS / GPS / IoT (REST, webhooks)
 ```
 
-See [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) for modules, security model, data model and design decisions. See [docs/DEMO_GUIDE.md](docs/DEMO_GUIDE.md) for a guided demonstration scenario.
+A 10-second product video is available in [docs/media/smartflow-demo.mp4](docs/media/smartflow-demo.mp4). See [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) for modules, security model, data model and design decisions. See [docs/DEMO_GUIDE.md](docs/DEMO_GUIDE.md) for a guided demonstration scenario.
 
 ## Repository layout
 
